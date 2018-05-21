@@ -47,7 +47,7 @@
             create or join a conversation.</li>
         <li>View the <a href="/about.jsp">about</a> page to learn more about the
             project.</li>
-        <li>View the <a href="/activity.jsp">activity feed</a> page to see what other users are currently upto.</li>
+        <li>View the <a href="/activity.jsp">activity feed</a> page to see what other users are currently up to.</li>
       </ul>
     </div>
   </div>
