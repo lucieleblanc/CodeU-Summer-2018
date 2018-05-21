@@ -73,7 +73,7 @@
 
   <servlet-mapping>
     <servlet-name>ActivityServlet</servlet-name>
-    <url-pattern>/activity</url-pattern>
+    <url-pattern>/activity.jsp</url-pattern>
   </servlet-mapping>
 
 </web-app>
