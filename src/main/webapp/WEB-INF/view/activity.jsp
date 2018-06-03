@@ -5,7 +5,6 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
 List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
-// List<Message> messages = (List<Message>) request.getAttribute("messages");
 %>
 
 
@@ -51,8 +50,8 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
 <div id="feed">
   <ul>
     <%
-      for (Conversation convo : conversations) {
-        String title = convo.getTitle();
+      for (Conversation conversation : conversations) {
+        String title = conversation.getTitle();
     %>
     <li><strong><%= title %></strong></li>
     <%
