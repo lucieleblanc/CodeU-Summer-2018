@@ -38,7 +38,7 @@
       style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
 
       <h1>CodeU Chat App</h1>
-      <h2>~ Created by Lucie, Kevin and Lauren! ~</h2>
+      <h2>~ Created by Lucie, Kevin and Lauren!!! ~</h2>
       <h3>Welcome!</h3>
 
       <ul>
