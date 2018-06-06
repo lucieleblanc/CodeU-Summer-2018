@@ -75,5 +75,10 @@
     <servlet-name>ActivityServlet</servlet-name>
     <url-pattern>/activity.jsp</url-pattern>
   </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/profile.jsp</url-pattern>
+  </servlet-mapping>
 
 </web-app>
