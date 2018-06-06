@@ -72,6 +72,9 @@ public class ActivityServlet extends HttpServlet {
 
 	   /* Make the conversations variable accesible to the jsp file. */           
        request.setAttribute("conversations", conversations);
+
+       /* Make messageStore accesible to the jsp file. */
+       request.setAttribute("messageStore", messageStore);
         
 	   request.getRequestDispatcher("/WEB-INF/view/activity.jsp").forward(request, response);
 	}
