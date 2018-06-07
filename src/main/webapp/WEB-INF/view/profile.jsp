@@ -47,9 +47,14 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
     <a href="/activity.jsp">Activity Feed</a>
     <a href="/profile.jsp">Profile</a>
   </nav>
-
-
+  <h2>
+<% if(request.getSession().getAttribute("user") != null){ %>
+      <a>Hello, <%= request.getSession().getAttribute("user") %>! Welcome to your profile.</a>
+    <% } else{ %>
+      <h2>To see your profile,<a href="/login"> login.</a></h2>
+    <% } %></h2>
     <h1>This is the profile page, coming soon!</h1>
+
 
   </div>
 </body>
