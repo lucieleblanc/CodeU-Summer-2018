@@ -48,6 +48,7 @@
         <li>View the <a href="/about.jsp">about</a> page to learn more about the
             project.</li>
         <li>View the <a href="/activity.jsp">activity feed</a> page to see what other users are currently up to.</li>
+        <li>Edit your <a href="/profile.jsp">profile.</a>
       </ul>
     </div>
   </div>
