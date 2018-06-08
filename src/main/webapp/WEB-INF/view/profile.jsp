@@ -47,13 +47,31 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
     <a href="/activity.jsp">Activity Feed</a>
     <a href="/profile.jsp">Profile</a>
   </nav>
-  <h2>
+
+
+ <h2>
 <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello, <%= request.getSession().getAttribute("user") %>! Welcome to your profile.</a>
-    <% } else{ %>
+      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1>
+      <% } else{ %>
       <h2>To see your profile,<a href="/login"> login.</a></h2>
-    <% } %></h2>
-    <h1>This is the profile page, coming soon!</h1>
+     <% } %>
+  </h2>
+
+
+
+ 
+
+
+    <form action="/profile.jsp">
+  First name: <input type="text" name="fname"><br>
+  Last name: <input type="text" name="lname"><br>
+  Bio: <input type="text" name="bio"><br>
+  Gender:
+  <input type="radio" name="gender" value="male"> Male<br>
+<input type="radio" name="gender" value="female"> Female<br>
+<input type="radio" name="gender" value="other"> Other
+  <input type="submit" value="Submit">
+</form>
 
 
   </div>
