@@ -57,9 +57,7 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
      <% } %>
   </h2>
 
-
-
- 
+-----------------------------------------------------------------------------------------------------
 
 
     <form action="/profile.jsp">
@@ -73,7 +71,34 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
   <input type="submit" value="Submit">
 </form>
 
+-----------------------------------------------------------------------------------------------------
 
+<div id="feed">
+  <ul>
+    <%
+      for (Conversation conversation : conversations) {
+        String title = conversation.getTitle();
+    %>
+    <li><strong><%= title %></strong></li>
+    <%
+      }
+    %>
+  </ul>
+</div>
   </div>
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+  
 </body>
 </html>
