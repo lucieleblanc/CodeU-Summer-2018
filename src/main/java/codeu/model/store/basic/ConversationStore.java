@@ -100,4 +100,11 @@ public class ConversationStore {
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
   }
+
+  /**
+   * Returns the current number of conversations.
+   */
+  public int getNumConversations() {
+    return this.conversations.size();
+  }
 }
