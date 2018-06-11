@@ -30,9 +30,10 @@
     <p>Here are some app statistics:</p>
 
     <ul>
-        <li>Number of users: <%= request.getSession().getAttribute("numUsers") %></li>
-        <li>Number of conversations: <%= request.getSession().getAttribute("numUsers") %></li>
-        <li>Etc: </li>
+        <li>Users: <%= request.getAttribute("numUsers") %></li>
+        <li>Conversations: <%= request.getAttribute("numConversations") %></li>
+        <li>Messages: <%= request.getAttribute("numMessages") %></li>
+        <li>Etc</li>
     </ul>
 
   </div>

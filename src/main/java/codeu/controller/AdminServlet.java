@@ -84,10 +84,11 @@ public class AdminServlet extends HttpServlet {
     if (isAdmin) {
       // user was in approved list, so show admin page
       request.setAttribute("numUsers", userStore.getNumUsers());
-      request.setAttribute("numUsers", conversationStore.getNumConversations());
+      request.setAttribute("numConversations", conversationStore.getNumConversations());
+      request.setAttribute("numMessages", messageStore.getNumMessages());
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
     } else {
-      request.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(request, response);
+      response.sendRedirect("/login");
     }
 
   }
