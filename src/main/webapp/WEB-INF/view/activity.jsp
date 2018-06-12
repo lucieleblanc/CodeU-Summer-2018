@@ -51,8 +51,10 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
   <ul>
     <%
       for (Conversation conversation : conversations) {
-        String title = conversation.getTitle();
     %>
+        <li><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></li>
+        
     <li><strong><%= title %></strong></li>
     <%
       }

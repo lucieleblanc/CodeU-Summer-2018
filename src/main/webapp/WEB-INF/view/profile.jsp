@@ -74,16 +74,17 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
 -----------------------------------------------------------------------------------------------------
 
 <div id="feed">
-  <ul>
+  <h1><%= request.getSession().getAttribute("user")%> 's Conversations:</h1>
+    <ul class="mdl-list">
     <%
-      for (Conversation conversation : conversations) {
-        String title = conversation.getTitle();
+      for(Conversation conversation : conversations){
     %>
-    <li><strong><%= title %></strong></li>
+      <li><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></li>
     <%
       }
     %>
-  </ul>
+      </ul>
 </div>
   </div>
 
@@ -99,6 +100,6 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
 
 
 
-  
+
 </body>
 </html>
