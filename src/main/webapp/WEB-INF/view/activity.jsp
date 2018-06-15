@@ -3,8 +3,12 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.store.basic.MessageStore" %>
 <%
 List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
+%>
+<%
+MessageStore messageStore = (MessageStore) request.getAttribute("messageStore");
 %>
 
 
@@ -50,13 +54,20 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
 <div id="feed">
   <ul>
     <%
-      for (Conversation conversation : conversations) {
+      /* Get the titles of the conversations. */
+       for (Conversation conversation : conversations) {
+         String title = conversation.getTitle();
     %>
-        <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></li>
-        
-    <li><strong><%= title %></strong></li>
-    <%
+       <li><strong><%= title %></strong></li>
+       <%
+            /* Get the messages of the conversations. */
+         List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
+         for (Message message : messages) {
+       %>
+           
+           <li><%= message.getContent() %></li>  
+    <%       
+         }
       }
     %>
   </ul>
