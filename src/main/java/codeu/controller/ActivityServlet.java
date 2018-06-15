@@ -75,6 +75,9 @@ public class ActivityServlet extends HttpServlet {
 
        /* Make messageStore accesible to the jsp file. */
        request.setAttribute("messageStore", messageStore);
+
+       /* Make userStore accesible to the jsp file. */
+       request.setAttribute("userStore", userStore);
         
 	   request.getRequestDispatcher("/WEB-INF/view/activity.jsp").forward(request, response);
 	}
