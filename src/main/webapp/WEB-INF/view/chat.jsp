@@ -56,6 +56,8 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
+    <a href="profile.jsp">Profile</a>
+
   </nav>
 
   <div id="container">
