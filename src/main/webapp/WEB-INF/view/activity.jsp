@@ -61,7 +61,9 @@ UserStore userStore = (UserStore) request.getAttribute("userStore");
   <ul>
     <%
        /* Used to format the time since the getCreationTime() method returns an instance, not a string. */
-       DateTimeFormatter formatter =DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT ).withLocale( Locale.US ).withZone( ZoneId.systemDefault() );
+       DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
+         .withLocale( Locale.US )
+         .withZone( ZoneId.systemDefault() );
        
        /* Get the titles of the conversations. */
        for (Conversation conversation : conversations) {
@@ -73,10 +75,10 @@ UserStore userStore = (UserStore) request.getAttribute("userStore");
          for (Message message : messages) {
        %>
            <%
-             String output = formatter.format( message.getCreationTime() );
+             String formatttedCreationTime = formatter.format( message.getCreationTime() );
            %>
 
-           <li><%= output + " " + userStore.getUser(message.getAuthorId()).getName() +
+           <li><%= formatttedCreationTime + ": " + userStore.getUser(message.getAuthorId()).getName() +
             " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
     <%       
          }
