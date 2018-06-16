@@ -2,13 +2,19 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.store.basic.MessageStore" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.format.FormatStyle" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.time.ZoneId" %>
 <%
 List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
-%>
-<%
+
 MessageStore messageStore = (MessageStore) request.getAttribute("messageStore");
+
+UserStore userStore = (UserStore) request.getAttribute("userStore");
 %>
 
 
@@ -54,18 +60,26 @@ MessageStore messageStore = (MessageStore) request.getAttribute("messageStore");
 <div id="feed">
   <ul>
     <%
-      /* Get the titles of the conversations. */
+       /* Used to format the time since the getCreationTime() method returns an instance, not a string. */
+       DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
+         .withLocale( Locale.US )
+         .withZone( ZoneId.systemDefault() );
+       
+       /* Get the titles of the conversations. */
        for (Conversation conversation : conversations) {
          String title = conversation.getTitle();
     %>
-       <li><strong><%= title %></strong></li>
        <%
-            /* Get the messages of the conversations. */
+         /* Get the messages of the conversations. */
          List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
          for (Message message : messages) {
        %>
-           
-           <li><%= message.getContent() %></li>  
+           <%
+             String formatttedCreationTime = formatter.format( message.getCreationTime() );
+           %>
+
+           <li><%= formatttedCreationTime + ": " + userStore.getUser(message.getAuthorId()).getName() +
+            " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
     <%       
          }
       }
@@ -79,7 +93,7 @@ MessageStore messageStore = (MessageStore) request.getAttribute("messageStore");
         <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
     
-    <h1>This is the activity feed page, coming soon!</h1>
+    <h1>Look at all this activity!</h1>
 
   </div>
 </body>
