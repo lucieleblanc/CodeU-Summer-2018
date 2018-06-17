@@ -15,6 +15,8 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
 MessageStore messageStore = (MessageStore) request.getAttribute("messageStore");
 
 UserStore userStore = (UserStore) request.getAttribute("userStore");
+
+List<User> users = (List<User>) request.getAttribute("users");
 %>
 
 
@@ -61,28 +63,37 @@ UserStore userStore = (UserStore) request.getAttribute("userStore");
   <ul>
     <%
        /* Used to format the time since the getCreationTime() method returns an instance, not a string. */
-       DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
-         .withLocale( Locale.US )
-         .withZone( ZoneId.systemDefault() );
+      DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime( FormatStyle.SHORT )
+        .withLocale( Locale.US )
+        .withZone( ZoneId.systemDefault() );
        
        /* Get the titles of the conversations. */
-       for (Conversation conversation : conversations) {
-         String title = conversation.getTitle();
+      for (Conversation conversation : conversations) {
+        String title = conversation.getTitle();
     %>
-       <%
-         /* Get the messages of the conversations. */
-         List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
-         for (Message message : messages) {
-       %>
-           <%
-             String formatttedCreationTime = formatter.format( message.getCreationTime() );
-           %>
+      <%
+        /* Get the messages of the conversations. */
+        List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
+        for (Message message : messages) {
+      %>
+          <%
+            String formatttedMessageCreationTime = formatter.format( message.getCreationTime() );
+          %>
 
-           <li><%= formatttedCreationTime + ": " + userStore.getUser(message.getAuthorId()).getName() +
-            " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
+          <li><%= formatttedMessageCreationTime + " PST: " + userStore.getUser(message.getAuthorId()).getName() +
+           " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
     <%       
-         }
+        }
       }
+    %>
+    <%  
+      for(User user: users){
+
+      String formatttedUserCreationTime = formatter.format( user.getCreationTime() );
+    %>
+        <li><%= formatttedUserCreationTime + " PST: " +user.getName() +" joined!" %></li>
+    <%
+      }     
     %>
   </ul>
 </div>
@@ -98,3 +109,4 @@ UserStore userStore = (UserStore) request.getAttribute("userStore");
   </div>
 </body>
 </html>
+

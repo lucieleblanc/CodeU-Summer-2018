@@ -2,6 +2,7 @@
 package codeu.controller;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.data.Message;
 import java.io.IOException;
 
@@ -70,7 +71,10 @@ public class ActivityServlet extends HttpServlet {
 	   /* Get all conversations. */
 	   List<Conversation> conversations = conversationStore.getAllConversations();
 
-	   /* Make the conversations variable accesible to the jsp file. */           
+	   /*Get all users. */
+	   List <User> users = userStore.getAllUsers();
+
+	   /* Make the conversations list accesible to the activity.jsp file. */           
        request.setAttribute("conversations", conversations);
 
        /* Make messageStore accesible to the jsp file. */
@@ -78,7 +82,11 @@ public class ActivityServlet extends HttpServlet {
 
        /* Make userStore accesible to the jsp file. */
        request.setAttribute("userStore", userStore);
-        
+
+       /* Make the users list accesbile to the activity.jsp file. */
+       request.setAttribute("users", users);
+
+       /* Forward the request to the activity.jsp file. */
 	   request.getRequestDispatcher("/WEB-INF/view/activity.jsp").forward(request, response);
 	}
 
