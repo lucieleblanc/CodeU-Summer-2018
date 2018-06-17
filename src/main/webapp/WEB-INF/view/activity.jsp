@@ -69,8 +69,11 @@ List<User> users = (List<User>) request.getAttribute("users");
        
        /* Get the titles of the conversations. */
       for (Conversation conversation : conversations) {
+        String formatttedConversationCreationTime = formatter.format( conversation.getCreationTime() );
         String title = conversation.getTitle();
     %>
+      <li><%= formatttedConversationCreationTime + ": " + userStore.getUser(conversation.getOwnerId()).getName() 
+        + " created a new conversation: " + conversation.getTitle() %></li>  
       <%
         /* Get the messages of the conversations. */
         List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
@@ -80,8 +83,8 @@ List<User> users = (List<User>) request.getAttribute("users");
             String formatttedMessageCreationTime = formatter.format( message.getCreationTime() );
           %>
 
-          <li><%= formatttedMessageCreationTime + " PST: " + userStore.getUser(message.getAuthorId()).getName() +
-           " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
+          <li><%= formatttedMessageCreationTime + " PST: " + userStore.getUser(message.getAuthorId()).getName() 
+            + " sent a message in " + title + ": " + "\"" + message.getContent() + "\"" %></li>  
     <%       
         }
       }
