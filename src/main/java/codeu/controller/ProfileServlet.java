@@ -3,11 +3,13 @@ package codeu.controller;
 
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
+import codeu.model.data.User; 
 import java.io.IOException;
 
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.BioStore; /**have to go make this page (?) **/ 
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +27,8 @@ public class ProfileServlet extends HttpServlet {
     private ConversationStore conversationStore;
     /* Store class that gives access to Messages. */
     private MessageStore messageStore;
+    /*adding store class that gives access to biography*/
+    private BioStore bioStore; 
     
     
     /**
@@ -37,6 +41,7 @@ public class ProfileServlet extends HttpServlet {
         setUserStore(UserStore.getInstance());
         setConversationStore(ConversationStore.getInstance());
         setMessageStore(MessageStore.getInstance());
+        setBioStore(BioStore.getInstance()); 
     }
     
     /**
@@ -62,22 +67,50 @@ public class ProfileServlet extends HttpServlet {
     void setMessageStore(MessageStore messageStore) {
         this.messageStore = messageStore;
     }
-    
+
+    /**
+    *Attempting to make a new data store for the about me/ bio section
+    */
+
+    void setBioStore(BioStore bioStore){
+        this.bioStore = bioStore;
+    }
+
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         
         /* Get all conversations. */
         List<Conversation> conversations = conversationStore.getAllConversations();
-        
+        // List<Bio> bios = bioStore.getAllBios(); 
+
         /* Make the conversations variable accesible to the jsp file. */
         request.setAttribute("conversations", conversations);
+
         
         request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
     }
-    
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
+        throws IOException, ServletException {
+            String userBio = request.getParameter("bio");
+       /** User.getBio(bio);**/
+            System.out.println(userBio);
+
+            response.sendRedirect("/profile.jsp");
     }
+   /** @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException {
+        //which user is logged in 
+        //make a call to userStore to update bio for this user
+
+
+        String bio = request.getParameter("bio");
+
+        System.out.println("About Me: " + bio);
+
+        response.sendRedirect("/profile.jsp");
+    }**/
 }

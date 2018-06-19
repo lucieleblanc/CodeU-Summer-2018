@@ -43,7 +43,9 @@ public class UserStore {
 
   /**
    * Instance getter function used for testing. Supply a mock for PersistentStorageAgent.
-   *
+   *place to store- space in database to store it - code change + database change 
+   focus on code change 
+   update existing user in userStore (add new field)
    * @param persistentStorageAgent a mock used for testing
    */
   public static UserStore getTestInstance(PersistentStorageAgent persistentStorageAgent) {
@@ -92,6 +94,8 @@ public class UserStore {
     }
     return null;
   }
+//
+ 
 
   /**
    * Add a new user to the current set of users known to the application. This should only be called
