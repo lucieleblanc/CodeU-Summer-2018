@@ -60,14 +60,21 @@
   </h2>
 
 <form action="/profile.jsp" method="POST">
-      About Me: 
-      <input type="text" name="bio" >
+      About Me:
+      <%
+      // NOTE(fang): Not request.getSession().getAttribute(). 
+      String bio = (String)request.getAttribute("bio");
+      if (bio == null) {
+        bio = "";
+      }
+      %>
+      <input type="text" name="bio" value="<%= bio%>" >
       <button type="submit">Submit</button>
 </form>
 
 
 
-  
+
 }
 
 
@@ -77,14 +84,16 @@
 %>
 <div id="feed">
   <h1><%= request.getSession().getAttribute("user")%> 's Conversations:</h1>
-   
+
     <%
+    if(conversations != null && !conversations.isEmpty()) {
       for(Conversation conversation : conversations){
     %>
       <li><a href="/chat/<%= conversation.getTitle() %>">
         <%= conversation.getTitle() %></a></li>
     <%
       }
+    }
     %>
 </div>
   </div>

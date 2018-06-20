@@ -3,13 +3,12 @@ package codeu.controller;
 
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
-import codeu.model.data.User; 
+import codeu.model.data.User;
 import java.io.IOException;
 
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.BioStore; /**have to go make this page (?) **/ 
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +19,15 @@ import javax.servlet.http.HttpServletResponse;
 
 /* Servlet class responsible for the activity feed page. */
 public class ProfileServlet extends HttpServlet {
-    
+
     /* Store class that gives access to users. */
     private UserStore userStore;
     /* Store class that gives access to conversations. */
     private ConversationStore conversationStore;
     /* Store class that gives access to Messages. */
     private MessageStore messageStore;
-    /*adding store class that gives access to biography*/
-    private BioStore bioStore; 
-    
-    
+
+
     /**
      * Set up state for handling activity-related requests. This method is only called when
      * running in a server, not when running in a test.
@@ -41,9 +38,8 @@ public class ProfileServlet extends HttpServlet {
         setUserStore(UserStore.getInstance());
         setConversationStore(ConversationStore.getInstance());
         setMessageStore(MessageStore.getInstance());
-        setBioStore(BioStore.getInstance()); 
     }
-    
+
     /**
      * Sets the UserStore used by this servlet. This function provides a common setup method for use
      * by the test framework or the servlet's init() function.
@@ -51,7 +47,7 @@ public class ProfileServlet extends HttpServlet {
     void setUserStore(UserStore userStore) {
         this.userStore = userStore;
     }
-    
+
     /**
      * Sets the ConversationStore used by this servlet. This function provides a common setup method
      * for use by the test framework or the servlet's init() function.
@@ -59,7 +55,7 @@ public class ProfileServlet extends HttpServlet {
     void setConversationStore(ConversationStore conversationStore) {
         this.conversationStore = conversationStore;
     }
-    
+
     /**
      * Sets the MessageStore used by this servlet. This function provides a common setup method for
      * use by the test framework or the servlet's init() function.
@@ -68,42 +64,48 @@ public class ProfileServlet extends HttpServlet {
         this.messageStore = messageStore;
     }
 
-    /**
-    *Attempting to make a new data store for the about me/ bio section
-    */
-
-    void setBioStore(BioStore bioStore){
-        this.bioStore = bioStore;
-    }
-
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
-        
-        /* Get all conversations. */
+      throws IOException, ServletException {
+        String username = (String) request.getSession().getAttribute("user");
+        User user = userStore.getUser(username);
+        if (user == null) {
+          // NOTE(fang): Don't do response.sendRedirect("/profile.jsp");
+          // here, which will cause infinite redirect.
+          // Seems "/profile.jsp" reinvoke the servlet, whereas
+          // "/WEB-INF/view/profile.jsp" simply renders the jsp file.
+          request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+          return;
+        }
+        // TODO(lauren): Not all conversations, should be only conversations that belong
+        // to the current user.
         List<Conversation> conversations = conversationStore.getAllConversations();
-        // List<Bio> bios = bioStore.getAllBios(); 
-
-        /* Make the conversations variable accesible to the jsp file. */
         request.setAttribute("conversations", conversations);
-
-        
+        System.out.println("In doGet(), user.getBio(): "+ user.getBio());
+        request.setAttribute("bio", user.getBio());
         request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
     }
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException {
-            String userBio = request.getParameter("bio");
-       /** User.getBio(bio);**/
-            System.out.println(userBio);
+      throws IOException, ServletException {
+        String username = (String) request.getSession().getAttribute("user");
+        User user = userStore.getUser(username);
+        String bio = request.getParameter("bio");
+        System.out.println("In doPost(), bio got from JSP: " + bio);
+        if (user == null) {
+          request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+          return;
 
-            response.sendRedirect("/profile.jsp");
+        }
+        System.out.println("Calling updateBio: " + bio);
+        userStore.updateBio(user.getId(), bio);
+        response.sendRedirect("/profile.jsp");
     }
    /** @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
-        //which user is logged in 
+        //which user is logged in
         //make a call to userStore to update bio for this user
 
 

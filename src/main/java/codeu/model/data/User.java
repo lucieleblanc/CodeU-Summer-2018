@@ -52,7 +52,7 @@ public class User {
   public String getName() {
     return name;
   }
-  
+
   /** Returns the password hash of this User. */
   public String getPasswordHash() {
     return passwordHash;
@@ -63,10 +63,9 @@ public class User {
     return creation;
   }
 
-  /**public void setBio(String bio){
-    this.bio = bio; 
-
-  }**/
+  public void setBio(String bio){
+    this.bio = bio;
+  }
 
   public String getBio(){
     return bio;
@@ -81,24 +80,3 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
     }**/
   //now we have a new property (?) of the user class (bio)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
