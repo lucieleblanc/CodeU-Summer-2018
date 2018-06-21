@@ -19,8 +19,11 @@ import codeu.model.store.basic.UserStore;
  */
 public class Event{
 
-	/* Denotes the type of event this is. 'c' for conversation, 'm' for message, and 'u' for user. */
-	private final Character eventType;
+	/* Denotes the type of event this is. Conversation, Message, or User. */
+	enum EventType{
+    CONVERSATION, MESSAGE, USER;
+  }
+  private final EventType eventType;
 
 	/* All the fields needed from the conversation class. */
 	private final String titleOfConversation;
@@ -29,18 +32,18 @@ public class Event{
 
 	/* All the fields needed from the message class. */
 	private final Instant messageCreationTime;
-    private final UUID authorIdForMessage;
-    private final String conversationTitleOfMessage;
-    private final String messageContent;
+  private final UUID authorIdForMessage;
+  private final String conversationTitleOfMessage;
+  private final String messageContent;
 
-    /* All the fields needed from the user class. */
-    private final Instant userCreationTime;
-    private final String nameOfUser;
+  /* All the fields needed from the user class. */
+  private final Instant userCreationTime;
+  private final String nameOfUser;
 
-    /* Needed to get the user given the ID from a conversation object. */
-    private final UserStore userStore;
-    /* Need to get the conversation given the ID from a message object. */
-    private final ConversationStore conversationStore;
+  /* Needed to get the user given the ID from a conversation object. */
+  private final UserStore userStore;
+  /* Need to get the conversation given the ID from a message object. */
+  private final ConversationStore conversationStore;
   
   /**
    * Constructs a new event using a Conversation object.
@@ -48,21 +51,22 @@ public class Event{
    * @param conversation an object of type Conversation
    */
 	public Event(Conversation conversation) {
-      userStore = UserStore.getInstance();
-      conversationStore = ConversationStore.getInstance();
+    eventType = EventType.CONVERSATION;
 
-      titleOfConversation = conversation.getTitle();
-      authorIdForConversation = conversation.getOwnerId();
-      conversationCreationTime = conversation.getCreationTime();
-      eventType = 'c';
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
 
-      messageCreationTime = null;
-      authorIdForMessage = null;
-      conversationTitleOfMessage = null;
-      messageContent = null;
+    titleOfConversation = conversation.getTitle();
+    authorIdForConversation = conversation.getOwnerId();
+    conversationCreationTime = conversation.getCreationTime();
 
-      userCreationTime = null;
-      nameOfUser = null;
+    messageCreationTime = null;
+    authorIdForMessage = null;
+    conversationTitleOfMessage = null;
+    messageContent = null;
+
+    userCreationTime = null;
+    nameOfUser = null;
 
 	}
 
@@ -72,21 +76,22 @@ public class Event{
    * @param message an object of type Message
    */
 	public Event(Message message) {
-      userStore = UserStore.getInstance();
-      conversationStore = ConversationStore.getInstance();
+    eventType = EventType.MESSAGE;
 
-      titleOfConversation = null;
-      authorIdForConversation = null;
-      conversationCreationTime = null;
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
 
-      messageCreationTime = message.getCreationTime();
-      authorIdForMessage = message.getAuthorId();
-      conversationTitleOfMessage = conversationStore.getConversationWithId(message.getConversationId()).getTitle(); //null error is here
-      messageContent = message.getContent();
-      eventType = 'm';
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
 
-      userCreationTime = null;
-      nameOfUser = null;
+    messageCreationTime = message.getCreationTime();
+    authorIdForMessage = message.getAuthorId();
+    conversationTitleOfMessage = conversationStore.getConversationWithId(message.getConversationId()).getTitle(); //null error is here
+    messageContent = message.getContent();
+
+    userCreationTime = null;
+    nameOfUser = null;
 	}
 
   /**
@@ -94,40 +99,41 @@ public class Event{
    *
    * @param user an object of type User
    */
-    public Event(User user) {
-      userStore = UserStore.getInstance();
-      conversationStore = ConversationStore.getInstance();
+  public Event(User user) {
+    eventType = EventType.USER;
 
-      titleOfConversation = null;
-      authorIdForConversation = null;
-      conversationCreationTime = null;
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
 
-      messageCreationTime = null;
-      authorIdForMessage = null;
-      conversationTitleOfMessage = null;
-      messageContent = null;
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
 
-      userCreationTime = user.getCreationTime();
-      nameOfUser = user.getName();
-      eventType = 'u';
+    messageCreationTime = null;
+    authorIdForMessage = null;
+    conversationTitleOfMessage = null;
+    messageContent = null;
+
+    userCreationTime = user.getCreationTime();
+    nameOfUser = user.getName();
 	}
 
 	/** Outputs a string based on the type given in the constructor. */
 	public String toString() {
 
-	  if(eventType == 'c') {
-        return dateTime_ToString(conversationCreationTime) + ": "+ 
+	  if(eventType == EventType.CONVERSATION) {
+        return toString(conversationCreationTime) + ": "+ 
           userStore.getUser(authorIdForConversation).getName() + 
           " created a new conversation: " + titleOfConversation;
 	  }
-	  if(eventType == 'm') {
-        return dateTime_ToString(messageCreationTime) + " PST: " + 
+	  if(eventType == EventType.MESSAGE) {
+        return toString(messageCreationTime) + " PST: " + 
           userStore.getUser(authorIdForMessage).getName() + 
           " sent a message in " + conversationTitleOfMessage + 
           ": " + "\"" + messageContent + "\"";
 	  }
-	  if(eventType == 'u') {
-	  	return dateTime_ToString(userCreationTime) + " PST: " + nameOfUser + " joined!";
+	  if(eventType == EventType.USER) {
+	  	return toString(userCreationTime) + " PST: " + nameOfUser + " joined!";
 	  }
 	  else{
 	  	System.err.println("This object has no event type. This is impossible. I don't know how you even caused this error");
@@ -136,19 +142,19 @@ public class Event{
 	}
 
     /** Formats time of type Instant into a string. */
-	public String dateTime_ToString(Instant unformattedTime) {
+	public String toString(Instant unformattedTime) {
 	  DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-        .withLocale(Locale.US)
-        .withZone(ZoneId.systemDefault());
+      .withLocale(Locale.US)
+      .withZone(ZoneId.systemDefault());
 
-      String formattedTime = formatter.format(unformattedTime);
+    String formattedTime = formatter.format(unformattedTime);
 
-      return formattedTime;
+    return formattedTime;
 	}
 
 	/** Returns the type of event that the object is. */
-	public Character getEventType() { 
-      return eventType;
+	public EventType getEventType() { 
+    return eventType;
 	}
 
     /** 
@@ -156,13 +162,13 @@ public class Event{
      *  to the time the event was created as a Long. 
      */
 	public Long getCreationTime() {
-		if(eventType == 'u') {
+		if(eventType == EventType.USER) {
 			return userCreationTime.getEpochSecond();
 		}
-		if(eventType == 'm') {
+		if(eventType == EventType.MESSAGE) {
 			return messageCreationTime.getEpochSecond();
 		}
-		if(eventType == 'c') {
+		if(eventType == EventType.CONVERSATION) {
 			return conversationCreationTime.getEpochSecond();
 		}
 		else {
