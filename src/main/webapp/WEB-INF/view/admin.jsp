@@ -2,6 +2,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
 <html>
@@ -33,6 +34,8 @@
         <li>Users: <%= request.getAttribute("numUsers") %></li>
         <li>Conversations: <%= request.getAttribute("numConversations") %></li>
         <li>Messages: <%= request.getAttribute("numMessages") %></li>
+        <li>Oldest user: <%= request.getAttribute("oldestUser") %>
+        <li>Newest user: <%= request.getAttribute("newestUser") %>
         <li>Etc</li>
     </ul>
 

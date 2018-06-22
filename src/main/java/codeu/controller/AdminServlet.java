@@ -86,6 +86,9 @@ public class AdminServlet extends HttpServlet {
       request.setAttribute("numUsers", userStore.getNumUsers());
       request.setAttribute("numConversations", conversationStore.getNumConversations());
       request.setAttribute("numMessages", messageStore.getNumMessages());
+      List<String> topUsers = userStore.getTopUsernames();
+      request.setAttribute("oldestUser", topUsers.get(0));
+      request.setAttribute("newestUser", topUsers.get(1));
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
     } else {
       response.sendRedirect("/login");
@@ -115,4 +118,5 @@ public class AdminServlet extends HttpServlet {
     }
     return false;
   }
+
 }
