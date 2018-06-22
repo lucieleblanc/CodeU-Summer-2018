@@ -1,11 +1,13 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%
-List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
-%>
+<%@ page import="codeu.model.store.basic.BioStore" %>
+<%@ page import="codeu.model.data.Bio"%>
+
+
 
 
 <!DOCTYPE html>
@@ -57,48 +59,44 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
      <% } %>
   </h2>
 
------------------------------------------------------------------------------------------------------
-
-
-    <form action="/profile.jsp">
-  First name: <input type="text" name="fname"><br>
-  Last name: <input type="text" name="lname"><br>
-  Bio: <input type="text" name="bio"><br>
-  Gender:
-  <input type="radio" name="gender" value="male"> Male<br>
-<input type="radio" name="gender" value="female"> Female<br>
-<input type="radio" name="gender" value="other"> Other
-  <input type="submit" value="Submit">
+<form action="/profile.jsp" method="POST">
+      About Me:
+      <%
+      // NOTE(fang): Not request.getSession().getAttribute(). 
+      String bio = (String)request.getAttribute("bio");
+      if (bio == null) {
+        bio = "";
+      }
+      %>
+      <input type="text" name="bio" value="<%= bio%>" >
+      <button type="submit">Submit</button>
 </form>
 
------------------------------------------------------------------------------------------------------
+<h1>Your Bio: </h1>
+-------------------------------------------------------------
+<div>
+<%= (String)request.getAttribute("bio")%> 
+</div>
+-------------------------------------------------------------
 
+<%List<Conversation> conversations =
+ (List<Conversation>) request.getAttribute("conversations");
+%>
 <div id="feed">
   <h1><%= request.getSession().getAttribute("user")%> 's Conversations:</h1>
-    <ul class="mdl-list">
+
     <%
+    if(conversations != null && !conversations.isEmpty()) {
       for(Conversation conversation : conversations){
     %>
-      <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></li>
+      <li><h3><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></h3></li>
     <%
       }
+    }
     %>
-      </ul>
 </div>
   </div>
-
-
-
-
-
-
-
------------------------------------------------------------------------------------------------------
-
-
-
-
 
 
 </body>

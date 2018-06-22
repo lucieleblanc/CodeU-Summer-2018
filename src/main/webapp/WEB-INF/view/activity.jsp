@@ -44,6 +44,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
+    <a href="profile.jsp">Profile</a>
   </nav>
 
 <div id="feed">
