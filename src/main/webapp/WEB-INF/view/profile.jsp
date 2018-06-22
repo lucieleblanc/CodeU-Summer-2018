@@ -72,13 +72,13 @@
       <button type="submit">Submit</button>
 </form>
 
+<h1>Your Bio: </h1>
+-------------------------------------------------------------
+<div>
+<%= (String)request.getAttribute("bio")%> 
+</div>
+-------------------------------------------------------------
 
-
-
-}
-
-
------------------------------------------------------------------------------------------------------
 <%List<Conversation> conversations =
  (List<Conversation>) request.getAttribute("conversations");
 %>
@@ -89,8 +89,8 @@
     if(conversations != null && !conversations.isEmpty()) {
       for(Conversation conversation : conversations){
     %>
-      <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></li>
+      <li><h3><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></h3></li>
     <%
       }
     }

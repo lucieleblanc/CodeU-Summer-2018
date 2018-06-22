@@ -55,6 +55,7 @@ UserStore userStore = (UserStore) request.getAttribute("userStore");
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
+    <a href="profile.jsp">Profile</a>
   </nav>
 
 <div id="feed">
