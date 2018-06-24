@@ -95,6 +95,32 @@ public class Event{
 	}
 
   /**
+   * Constructor used for testing. Supply a mock for message.
+   *
+   * @param message a mock message used for testing.
+   * @param string  a mock string used for testing (the conversation for the message doesn't 
+   *                exist because it is a test. Would other wise give a nullptr exception).
+   */
+  public Event(Message message, String testTitle) {
+    eventType = EventType.MESSAGE;
+
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
+
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
+
+    messageCreationTime = message.getCreationTime();
+    authorIdForMessage = message.getAuthorId();
+    conversationTitleOfMessage = testTitle;
+    messageContent = message.getContent();
+
+    userCreationTime = null;
+    nameOfUser = null;
+  }
+
+  /**
    * Constructs an new event using a User object.
    *
    * @param user an object of type User
