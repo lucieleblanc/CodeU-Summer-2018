@@ -20,7 +20,7 @@ import codeu.model.store.basic.UserStore;
 public class Event{
 
 	/* Denotes the type of event this is. Conversation, Message, or User. */
-	enum EventType{
+	public enum EventType{
     CONVERSATION, MESSAGE, USER;
   }
   private final EventType eventType;
@@ -220,7 +220,7 @@ public class Event{
      *  Returns seconds from the time Java was created 
      *  to the time the event was created as a Long. 
      */
-	public Long getCreationTime() {
+	public long getCreationTime() {
 		if(eventType == EventType.USER) {
 			return userCreationTime.getEpochSecond();
 		}
@@ -232,7 +232,7 @@ public class Event{
 		}
 		else {
 			System.err.println("This object has no event type");
-			return null;
+			return 0;
 		}
 	}
 
