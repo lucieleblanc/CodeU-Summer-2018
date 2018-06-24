@@ -17,6 +17,7 @@ package codeu.model.store.basic;
 import codeu.model.data.Conversation;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,11 +59,15 @@ public class ConversationStore {
 
   /** The in-memory list of Conversations. */
   private List<Conversation> conversations;
+  private HashMap<UUID, Conversation> conversationMap_IdKeyValues;
+  private HashMap<String, Conversation> conversationMap_StringKeyValues;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private ConversationStore(PersistentStorageAgent persistentStorageAgent) {
     this.persistentStorageAgent = persistentStorageAgent;
     conversations = new ArrayList<>();
+    conversationMap_IdKeyValues = new HashMap<>();
+    conversationMap_StringKeyValues = new HashMap<>();
   }
 
   /** Access the current set of conversations known to the application. */
@@ -73,48 +78,57 @@ public class ConversationStore {
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);
+    conversationMap_IdKeyValues.put(
+      conversation.getId(), conversation);
+    conversationMap_StringKeyValues.put(
+      conversation.getTitle(), conversation);
     persistentStorageAgent.writeThrough(conversation);
   }
 
   /** Check whether a Conversation title is already known to the application. */
   public boolean isTitleTaken(String title) {
-    // This approach will be pretty slow if we have many Conversations.
-    for (Conversation conversation : conversations) {
-      if (conversation.getTitle().equals(title)) {
-        return true;
-      }
+    if (conversationMap_StringKeyValues.containsKey(title)) {
+      return true;
     }
-    return false;
+    else {
+      return false;
+    }
   }
 
   /** Find and return the Conversation with the given title. */
   public Conversation getConversationWithTitle(String title) {
-    for (Conversation conversation : conversations) {
-      if (conversation.getTitle().equals(title)) {
-        return conversation;
-      }
+    if (conversationMap_StringKeyValues.containsKey(title)) {
+      return conversationMap_StringKeyValues.get(title);
     }
-    System.err.println("The conversation you were looking for could not be found." +
-                       " No Id's matched. Please check if the conversation actually" +
-                       " exists on the admin page if on local server or the app engine. ");
-    return null;
+    else {
+      System.err.println("The conversation you were looking for could not be found." +
+                         " No title's matched. Please check if the conversation actually" +
+                         " exists on the admin page if on local server or the app engine. ");
+      return null;
+    }
   }
 
   /** Find and return the Conversation with the given Id. */
   public Conversation getConversationWithId(UUID id) {
-    for (Conversation conversation : conversations) {
-      if (conversation.getId().equals(id)) {
-        return conversation;
-      }
+    if (conversationMap_IdKeyValues.containsKey(id)) {
+      return conversationMap_IdKeyValues.get(id);
     }
-    System.err.println("The conversation you were looking for could not be found." +
-                       " No Id's matched. Please check if the conversation actually" +
-                       " exists on the admin page if on local server or the app engine. ");
-    return null;
+    else {
+      System.err.println("The conversation you were looking for could not be found." +
+                         " No Id's matched. Please check if the conversation actually" +
+                         " exists on the admin page if on local server or the app engine. ");
+      return null;
+    }
   }
 
   /** Sets the List of Conversations stored by this ConversationStore. */
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
+    for(Conversation conversation: conversations) {
+      conversationMap_IdKeyValues.put(
+        conversation.getId(), conversation);
+      conversationMap_StringKeyValues.put(
+        conversation.getTitle(), conversation);
+    }
   }
 }
