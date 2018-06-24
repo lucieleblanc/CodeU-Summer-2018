@@ -92,6 +92,11 @@ public class ActivityServletTest{
     activityServlet.doGet(mockRequest, mockResponse);
 
     /* 
+     * NOTE: Essentially when we use verify we are saying
+     * "make sure that this function actually did this"
+     */
+
+    /* 
      * Verify that we set the attribute 
      * events which is the fakeEventList. 
      */
