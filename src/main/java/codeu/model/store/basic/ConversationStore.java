@@ -94,6 +94,9 @@ public class ConversationStore {
         return conversation;
       }
     }
+    System.err.println("The conversation you were looking for could not be found." +
+                       " No Id's matched. Please check if the conversation actually" +
+                       " exists on the admin page if on local server or the app engine. ");
     return null;
   }
 
@@ -104,7 +107,9 @@ public class ConversationStore {
         return conversation;
       }
     }
-    System.err.println("The conversation you were looking for could not be found. No Id's matched.");
+    System.err.println("The conversation you were looking for could not be found." +
+                       " No Id's matched. Please check if the conversation actually" +
+                       " exists on the admin page if on local server or the app engine. ");
     return null;
   }
 
