@@ -15,10 +15,10 @@ public class ConversationStoreTest {
 
   private ConversationStore conversationStore;
   private PersistentStorageAgent mockPersistentStorageAgent;
-
+  private final UUID  CONVERSATION_ID = UUID.randomUUID();
   private final Conversation CONVERSATION_ONE =
       new Conversation(
-          UUID.randomUUID(), UUID.randomUUID(), "conversation_one", Instant.ofEpochMilli(1000));
+          CONVERSATION_ID, UUID.randomUUID(), "conversation_one", Instant.ofEpochMilli(1000));
 
   @Before
   public void setup() {
@@ -41,6 +41,21 @@ public class ConversationStoreTest {
   @Test
   public void testGetConversationWithTitle_notFound() {
     Conversation resultConversation = conversationStore.getConversationWithTitle("unfound_title");
+
+    Assert.assertNull(resultConversation);
+  }
+
+  @Test
+  public void testGetConversationWithId_found() {
+    Conversation resultConversation =
+        conversationStore.getConversationWithId(CONVERSATION_ID);
+
+    assertEquals(CONVERSATION_ONE, resultConversation);
+  }
+
+  @Test
+  public void testGetConversationWithId_notFound() {
+    Conversation resultConversation = conversationStore.getConversationWithId(UUID.randomUUID());
 
     Assert.assertNull(resultConversation);
   }
