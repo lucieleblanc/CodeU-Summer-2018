@@ -61,15 +61,15 @@ public class UserStore {
 
   /** The in-memory list of Users. */
   private List<User> users;
-  private HashMap<UUID, User> userMap_IdKeyValues;
-  private HashMap<String, User> userMap_StringKeyValues;
+  private HashMap<UUID, User> userKeyMap;
+  private HashMap<String, User> userNameMap;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private UserStore(PersistentStorageAgent persistentStorageAgent) {
     this.persistentStorageAgent = persistentStorageAgent;
     users = new ArrayList<>();
-    userMap_IdKeyValues = new HashMap<>();
-    userMap_StringKeyValues = new HashMap<>();
+    userKeyMap = new HashMap<>();
+    userNameMap = new HashMap<>();
   }
 
   /** Access the current set of users known to the application. */
@@ -83,8 +83,8 @@ public class UserStore {
    * @return null if username does not match any existing User.
    */
   public User getUser(String username) {
-    if(userMap_StringKeyValues.containsKey(username)) {
-      return userMap_StringKeyValues.get(username);
+    if(userNameMap.containsKey(username)) {
+      return userNameMap.get(username);
     }
     else {
       return null;
@@ -97,8 +97,8 @@ public class UserStore {
    * @return null if the UUID does not match any existing User.
    */
   public User getUser(UUID id) {
-    if(userMap_IdKeyValues.containsKey(id)) {
-      return userMap_IdKeyValues.get(id);
+    if(userKeyMap.containsKey(id)) {
+      return userKeyMap.get(id);
     }
     else {
       return null;
@@ -111,8 +111,8 @@ public class UserStore {
    */
   public void addUser(User user) {
     users.add(user);
-    userMap_IdKeyValues.put(user.getId(), user);
-    userMap_StringKeyValues.put(user.getName(), user);
+    userKeyMap.put(user.getId(), user);
+    userNameMap.put(user.getName(), user);
     persistentStorageAgent.writeThrough(user);
   }
 
@@ -134,7 +134,7 @@ public class UserStore {
 
   /** Return true if the given username is known to the application. */
   public boolean isUserRegistered(String username) {
-    if(userMap_StringKeyValues.containsKey(username)) {
+    if(userNameMap.containsKey(username)) {
       return true;
     }
     else {
@@ -149,8 +149,8 @@ public class UserStore {
   public void setUsers(List<User> users) {
     this.users = users;
     for(User user: users) {
-      userMap_IdKeyValues.put(user.getId(), user);
-      userMap_StringKeyValues.put(user.getName(), user);
+      userKeyMap.put(user.getId(), user);
+      userNameMap.put(user.getName(), user);
     }
   }
 

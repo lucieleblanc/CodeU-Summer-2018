@@ -59,15 +59,15 @@ public class ConversationStore {
 
   /** The in-memory list of Conversations. */
   private List<Conversation> conversations;
-  private HashMap<UUID, Conversation> conversationMap_IdKeyValues;
-  private HashMap<String, Conversation> conversationMap_StringKeyValues;
+  private HashMap<UUID, Conversation> conversationIdMap;
+  private HashMap<String, Conversation> conversationTitleMap;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private ConversationStore(PersistentStorageAgent persistentStorageAgent) {
     this.persistentStorageAgent = persistentStorageAgent;
     conversations = new ArrayList<>();
-    conversationMap_IdKeyValues = new HashMap<>();
-    conversationMap_StringKeyValues = new HashMap<>();
+    conversationIdMap = new HashMap<>();
+    conversationTitleMap = new HashMap<>();
   }
 
   /** Access the current set of conversations known to the application. */
@@ -78,16 +78,16 @@ public class ConversationStore {
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);
-    conversationMap_IdKeyValues.put(
+    conversationIdMap.put(
       conversation.getId(), conversation);
-    conversationMap_StringKeyValues.put(
+    conversationTitleMap.put(
       conversation.getTitle(), conversation);
     persistentStorageAgent.writeThrough(conversation);
   }
 
   /** Check whether a Conversation title is already known to the application. */
   public boolean isTitleTaken(String title) {
-    if (conversationMap_StringKeyValues.containsKey(title)) {
+    if (conversationTitleMap.containsKey(title)) {
       return true;
     }
     else {
@@ -97,8 +97,8 @@ public class ConversationStore {
 
   /** Find and return the Conversation with the given title. */
   public Conversation getConversationWithTitle(String title) {
-    if (conversationMap_StringKeyValues.containsKey(title)) {
-      return conversationMap_StringKeyValues.get(title);
+    if (conversationTitleMap.containsKey(title)) {
+      return conversationTitleMap.get(title);
     }
     else {
       System.err.println("The conversation you were looking for could not be found." +
@@ -110,8 +110,8 @@ public class ConversationStore {
 
   /** Find and return the Conversation with the given Id. */
   public Conversation getConversationWithId(UUID id) {
-    if (conversationMap_IdKeyValues.containsKey(id)) {
-      return conversationMap_IdKeyValues.get(id);
+    if (conversationIdMap.containsKey(id)) {
+      return conversationIdMap.get(id);
     }
     else {
       System.err.println("The conversation you were looking for could not be found." +
@@ -125,9 +125,9 @@ public class ConversationStore {
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
     for(Conversation conversation: conversations) {
-      conversationMap_IdKeyValues.put(
+      conversationIdMap.put(
         conversation.getId(), conversation);
-      conversationMap_StringKeyValues.put(
+      conversationTitleMap.put(
         conversation.getTitle(), conversation);
     }
   }
