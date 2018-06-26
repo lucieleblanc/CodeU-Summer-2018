@@ -17,8 +17,10 @@ package codeu.model.store.basic;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import static jdk.nashorn.internal.runtime.Debug.id;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -59,11 +61,15 @@ public class UserStore {
 
   /** The in-memory list of Users. */
   private List<User> users;
+  private HashMap<UUID, User> userKeyMap;
+  private HashMap<String, User> userNameMap;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private UserStore(PersistentStorageAgent persistentStorageAgent) {
     this.persistentStorageAgent = persistentStorageAgent;
     users = new ArrayList<>();
+    userKeyMap = new HashMap<>();
+    userNameMap = new HashMap<>();
   }
 
   /** Access the current set of users known to the application. */
@@ -77,13 +83,12 @@ public class UserStore {
    * @return null if username does not match any existing User.
    */
   public User getUser(String username) {
-    // This approach will be pretty slow if we have many users.
-    for (User user : users) {
-      if (user.getName().equals(username)) {
-        return user;
-      }
+    if(userNameMap.containsKey(username)) {
+      return userNameMap.get(username);
     }
-    return null;
+    else {
+      return null;
+    }
   }
 
   /**
@@ -92,15 +97,13 @@ public class UserStore {
    * @return null if the UUID does not match any existing User.
    */
   public User getUser(UUID id) {
-    for (User user : users) {
-      if (user.getId().equals(id)) {
-        return user;
-      }
+    if(userKeyMap.containsKey(id)) {
+      return userKeyMap.get(id);
     }
-    return null;
+    else {
+      return null;
+    }
   }
-//
-
 
   /**
    * Add a new user to the current set of users known to the application. This should only be called
@@ -108,6 +111,8 @@ public class UserStore {
    */
   public void addUser(User user) {
     users.add(user);
+    userKeyMap.put(user.getId(), user);
+    userNameMap.put(user.getName(), user);
     persistentStorageAgent.writeThrough(user);
   }
 
@@ -129,12 +134,12 @@ public class UserStore {
 
   /** Return true if the given username is known to the application. */
   public boolean isUserRegistered(String username) {
-    for (User user : users) {
-      if (user.getName().equals(username)) {
-        return true;
-      }
+    if(userNameMap.containsKey(username)) {
+      return true;
     }
-    return false;
+    else {
+      return false;
+    }
   }
 
   /**
@@ -143,6 +148,10 @@ public class UserStore {
    */
   public void setUsers(List<User> users) {
     this.users = users;
+    for(User user: users) {
+      userKeyMap.put(user.getId(), user);
+      userNameMap.put(user.getName(), user);
+    }
   }
 
 }
