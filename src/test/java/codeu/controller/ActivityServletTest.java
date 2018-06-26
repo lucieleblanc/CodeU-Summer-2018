@@ -23,6 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+  /*
+   * TODO(VillanuevaK): Add a test for doPost if it is implemented.
+   */
 public class ActivityServletTest{
   private ActivityServlet activityServlet;
   private HttpServletRequest mockRequest;
@@ -110,4 +113,5 @@ public class ActivityServletTest{
     Mockito.verify(mockRequestDispatcher)
       .forward(mockRequest, mockResponse);
   }
+
 }
