@@ -15,6 +15,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,9 @@ public class ConversationStore {
   public List<Conversation> getAllConversations() {
     return conversations;
   }
+//public List<ConversationSpec> getConversationWithId(){
 
+//}
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);
@@ -112,4 +115,14 @@ public class ConversationStore {
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
   }
+
+public Conversation getConversationWithOwnerId(UUID owner) {
+    for (Conversation conversation : conversations) {
+      if (conversation.getOwnerId().equals(owner)) {
+        return conversation;
+        }
+      }
+      System.err.println("This user has not started a conversation yet.");
+      return null;
+    }
 }

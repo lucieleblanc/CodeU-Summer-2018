@@ -80,8 +80,9 @@ public class ProfileServlet extends HttpServlet {
         }
         // TODO(lauren): Not all conversations, should be only conversations that belong
         // to the current user.
-        List<Conversation> conversations = conversationStore.getAllConversations();
-        request.setAttribute("conversations", conversations);
+        UUID ownerid = (UUID) request.getSession().getAttribute("owner");
+        List <Conversation> conversations = conversationStore.getConversationWithOwnerId(ownerid);
+        request.getSession().setAttribute("conversations", conversations);
         System.out.println("In doGet(), user.getBio(): "+ user.getBio());
         request.setAttribute("bio", user.getBio());
         request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
