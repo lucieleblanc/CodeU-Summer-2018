@@ -44,8 +44,13 @@
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
-    <a href="/profile.jsp">Profile</a>
-  </nav>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+    <!--<% String user = (String)request.getSession().getAttribute("user");%>-->
+    <a href="/profile/<%=user%>" >My Profile</a>  
+    <%} else{%>
+      <a href="/login"> My Profile</a>
+    <% } %>  
+      </nav>
 
 <center>
  <h2>
@@ -57,13 +62,12 @@
   </h2>
 <center>
 ______________________________________________________________________________________________________________________________________________
-<%List<Conversation> conversations =
- (List<Conversation>) request.getAttribute("conversations");
-%>
-<%= (String)request.getAttribute("bio")%> 
+
+
 <h2>About <%= request.getSession().getAttribute("user")%>: </h2>
+<%= (String)request.getAttribute("bio")%> 
 <h2> Edit your Bio:</h2>
-  <form action="/profile.jsp" method="POST">
+  <form action="/profile/" method="POST">
     <%
       // NOTE(fang): Not request.getSession().getAttribute(). 
       String bio = (String)request.getAttribute("bio");
@@ -77,23 +81,28 @@ ________________________________________________________________________________
 <div>
 
 </div>
-<!--<% User user = User.from(user.getId)%>
-<% Conversation id = Conversation.from(conversation.getOwnerId)%>-->
-<!--<%if(conversations != null && !conversations.isEmpty()){ %>-->
+<%List<Conversation> conversations =
+ (List<Conversation>) request.getAttribute("conversations");
+%>
+<div id="feed"> 
+ <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
 
-  <% for(Conversation conversation : conversations){ %>
-    <!-- <%if(conversation.getOwnerId() == request.getAttribute("id")){ %>-->
-          <li><p><a href="/chat/<%= conversation.getTitle()%>">
-          <%= conversation.getTitle() %> </li></a><p>;
-      <!--<% } %>-->
-    <% } %>
-  <% } %>
+    <%
+    if(conversations != null && !conversations.isEmpty()) {
+      for(Conversation conversation : conversations){
+    %>
+      <li><h3><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></h3></li>
+    <%
+      }
+    }
+    %>
 
 </center>
 _____________________________________________________________________________________________________________________________________________
 
 
-  <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
+
 
   <!--<div id="feed">
 <center>

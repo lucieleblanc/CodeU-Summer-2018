@@ -31,7 +31,13 @@
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
-  </nav>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+    <% String user = (String)request.getSession().getAttribute("user");%>
+    <a href="/profile/<%=user%>" >My Profile</a>  
+    <%} else{%>
+      <a href="/login"> My Profile</a>
+    <% } %>
+      </nav>
 
   <div id="container">
     <h1>Register</h1>

@@ -75,14 +75,17 @@ public class ProfileServlet extends HttpServlet {
           // here, which will cause infinite redirect.
           // Seems "/profile.jsp" reinvoke the servlet, whereas
           // "/WEB-INF/view/profile.jsp" simply renders the jsp file.
-          request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+          //request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
           return;
         }
         // TODO(lauren): Not all conversations, should be only conversations that belong
         // to the current user.
-        UUID ownerid = (UUID) request.getSession().getAttribute("owner");
-        List <Conversation> conversations = conversationStore.getConversationWithOwnerId(ownerid);
-        request.getSession().setAttribute("conversations", conversations);
+        //UUID ownerid = (UUID) request.getSession().getAttribute("owner");
+        String requestUrl = request.getRequestURI();
+        String userUrl = requestUrl.substring("/profile/".length());
+        //request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
+        List <Conversation> conversations = conversationStore.getAllConversations();
+        request.setAttribute("conversations", conversations);
         System.out.println("In doGet(), user.getBio(): "+ user.getBio());
         request.setAttribute("bio", user.getBio());
         request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
@@ -90,18 +93,25 @@ public class ProfileServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+       String userProfile = (String) request.getSession().getAttribute("user");
+        if(userProfile == null){
+          response.sendRedirect("/login");
+          return;
+        }
+        String requestUrl = request.getRequestURI();
+        String userUrl = requestUrl.substring("/profile/".length());
         String username = (String) request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         String bio = request.getParameter("bio");
         System.out.println("In doPost(), bio got from JSP: " + bio);
-        if (user == null) {
-          request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+        /*if (user == null) {
+          request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
           return;
 
-        }
+        }*/
         System.out.println("Calling updateBio: " + bio);
         userStore.updateBio(user.getId(), bio);
-        response.sendRedirect("/profile.jsp");
+        response.sendRedirect("/profile/" + userUrl);
     }
    /** @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
