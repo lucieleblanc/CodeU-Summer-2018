@@ -20,7 +20,7 @@ import codeu.model.store.basic.UserStore;
 public class Event{
 
 	/* Denotes the type of event this is. Conversation, Message, or User. */
-	enum EventType{
+	public enum EventType{
     CONVERSATION, MESSAGE, USER;
   }
   private final EventType eventType;
@@ -29,16 +29,19 @@ public class Event{
 	private final String titleOfConversation;
 	private final UUID authorIdForConversation;
 	private final Instant conversationCreationTime;
+  private final UUID conversationId;
 
 	/* All the fields needed from the message class. */
 	private final Instant messageCreationTime;
   private final UUID authorIdForMessage;
   private final String conversationTitleOfMessage;
   private final String messageContent;
+  private final UUID messageId;
 
   /* All the fields needed from the user class. */
   private final Instant userCreationTime;
   private final String nameOfUser;
+  private final UUID userId;
 
   /* Needed to get the user given the ID from a conversation object. */
   private final UserStore userStore;
@@ -59,14 +62,17 @@ public class Event{
     titleOfConversation = conversation.getTitle();
     authorIdForConversation = conversation.getOwnerId();
     conversationCreationTime = conversation.getCreationTime();
+    conversationId = conversation.getId();
 
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
     messageContent = null;
+    messageId = null;
 
     userCreationTime = null;
     nameOfUser = null;
+    userId = null;
 
 	}
 
@@ -84,15 +90,65 @@ public class Event{
     titleOfConversation = null;
     authorIdForConversation = null;
     conversationCreationTime = null;
+    conversationId = null;
 
     messageCreationTime = message.getCreationTime();
     authorIdForMessage = message.getAuthorId();
-    conversationTitleOfMessage = conversationStore.getConversationWithId(message.getConversationId()).getTitle(); //null error is here
+    try {
+      conversationStore.getConversationWithId(message
+        .getConversationId()).getTitle();
+    }
+    catch (NullPointerException e) {
+      System.err.println("_______________________________________________"  +
+                         "\n CAUGHT EXCEPTION_____________________________" + 
+                         " This message does not have a conversation"    + 
+                         " it is associated with. If you are unit test," + 
+                         " consider using the other constructor that takes" + 
+                         " a message and a placeholder for the conversationTitleOfMessage," + 
+                         " otherwise consider checking the admin page or"   + 
+                         " appegine for to see if the conversation exists." + 
+                         " _______________________________________________" +
+                         "\n_______________________________________________");
+    }
+    conversationTitleOfMessage = conversationStore.getConversationWithId(
+      message.getConversationId()).getTitle();
+
     messageContent = message.getContent();
+    messageId = message.getId();
 
     userCreationTime = null;
     nameOfUser = null;
+    userId = null;
 	}
+
+  /**
+   * Constructor used for testing. Supply a mock for message.
+   *
+   * @param message a mock message used for testing.
+   * @param testTitle  a mock string used for testing (the conversation for the message doesn't 
+   *                exist because it is a test. Would other wise give a nullptr exception).
+   */
+  public Event(Message message, String testTitle) {
+    eventType = EventType.MESSAGE;
+
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
+
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
+    conversationId = null;
+
+    messageCreationTime = message.getCreationTime();
+    authorIdForMessage = message.getAuthorId();
+    conversationTitleOfMessage = testTitle;
+    messageContent = message.getContent();
+    messageId = message.getId();
+
+    userCreationTime = null;
+    nameOfUser = null;
+    userId = null;
+  }
 
   /**
    * Constructs an new event using a User object.
@@ -108,14 +164,17 @@ public class Event{
     titleOfConversation = null;
     authorIdForConversation = null;
     conversationCreationTime = null;
+    conversationId = null;
 
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
     messageContent = null;
+    messageId = null;
 
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
+    userId = user.getId();
 	}
 
 	/** Outputs a string based on the type given in the constructor. */
@@ -161,7 +220,7 @@ public class Event{
      *  Returns seconds from the time Java was created 
      *  to the time the event was created as a Long. 
      */
-	public Long getCreationTime() {
+	public long getCreationTime() {
 		if(eventType == EventType.USER) {
 			return userCreationTime.getEpochSecond();
 		}
@@ -173,7 +232,23 @@ public class Event{
 		}
 		else {
 			System.err.println("This object has no event type");
-			return null;
+			return 0;
 		}
 	}
+
+  public UUID getId() {
+    if(eventType == EventType.USER) {
+      return userId;
+    }
+    if(eventType == EventType.MESSAGE) {
+      return messageId;
+    }
+    if(eventType == EventType.CONVERSATION) {
+      return conversationId;
+    }
+    else {
+      System.err.println("This object has no event type");
+      return null;
+    }
+  }
 }

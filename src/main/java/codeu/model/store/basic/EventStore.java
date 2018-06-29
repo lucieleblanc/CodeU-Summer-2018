@@ -12,7 +12,6 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 
 import java.util.Comparator;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +77,12 @@ public class EventStore{
   	events.sort(Comparator.comparingLong(event -> event.getCreationTime()));
     return events;
   }
+
+  /** Access the current set of events known to the application. */
+  public List<Event> getAllEvents() {
+    /* Sort events based on the time that they were created. */
+    return events;
+  }
   
   /** Set converations, messages, and users. */
   public void setEvents(List<User> users, List <Conversation> conversations, List <Message> messages){
@@ -85,6 +90,11 @@ public class EventStore{
     this.messages = messages;
     this.users = users;
     convertToEvents();
+  }
+
+  /** Set converations, messages, and users. */
+  public void setEvents(List<Event> events){
+    this.events = events;
   }
  
   /** Convert converations, messages, and users to event types. */
