@@ -4,7 +4,6 @@
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%@ page import="codeu.model.store.basic.BioStore" %>
 <%@ page import="codeu.model.data.Bio"%>
 
 
