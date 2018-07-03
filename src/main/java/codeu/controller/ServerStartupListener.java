@@ -33,6 +33,9 @@ public class ServerStartupListener implements ServletContextListener {
       List<Message> messages = PersistentStorageAgent.getInstance().loadMessages();
       MessageStore.getInstance().setMessages(messages);
 
+      List<Media> media = PersistentStorageAgent.getInstance().loadMedia();
+      MediaStore.getInstance().setMedia(media);
+
       /* This lets the EventStore access the user, conversation, and message lists. */
       EventStore.getInstance().setEvents(users, conversations, messages);
 
