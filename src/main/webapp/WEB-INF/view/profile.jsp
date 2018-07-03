@@ -57,7 +57,7 @@
       <h2>To see your profile,<a href="/login"> login.</a></h2>
      <% } %>
   </h2>
-<img src="PutProfImagehere" alt="ProfileImagePlace" width="500" height="333">
+<img src="PutProfImagehere" alt="Profile Image Here" width="500" height="333">
 <form action="/profile.jsp" method="POST">
       About Me:
       <%
