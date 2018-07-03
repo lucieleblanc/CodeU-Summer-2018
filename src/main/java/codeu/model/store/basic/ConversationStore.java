@@ -75,6 +75,7 @@ public class ConversationStore {
   public List<Conversation> getAllConversations() {
     return conversations;
   }
+
 //public List<ConversationSpec> getConversationWithId(){
 
 //}
@@ -110,9 +111,18 @@ public class ConversationStore {
       return null;
     }
   }
-
+public List<Conversation> getConversationWithOwner(UUID userId){
+  List<Conversation> userConvos = new ArrayList();//UUID curUserID = request.getSession().getAttribute("user"); (how does it know to get this from the user class vs the conversation class)
+  for(Conversation conversation: conversations)
+  {
+    if(conversation.getOwnerId() == userId){
+      userConvos.add(conversation);
+    }
+  }
+  return userConvos;
+}
   /** Find and return the Conversation with the given Id. */
-  public Conversation getConversationWithId(UUID id) {
+  public Conversation getConversationWithId(UUID id){
     if (conversationIdMap.containsKey(id)) {
       return conversationIdMap.get(id);
     }

@@ -44,7 +44,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <% } %>
     <a href="/about.jsp">About</a>
      <% if(request.getSession().getAttribute("user") != null){ %>
-    <% String user = request.getSession().getAttribute("user");%>
+    <% String user = (String)request.getSession().getAttribute("user");%>
     <a href="/profile/<%=user%>" >My Profile</a>  
     <%} else{%>
       <a href="/login"> My Profile</a>

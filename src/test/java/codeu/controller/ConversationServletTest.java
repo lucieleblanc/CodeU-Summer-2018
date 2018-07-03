@@ -64,6 +64,7 @@ public class ConversationServletTest {
     conversationServlet.setUserStore(mockUserStore);
   }
 
+
   @Test
   public void testDoGet() throws IOException, ServletException {
     List<Conversation> fakeConversationList = new ArrayList<>();

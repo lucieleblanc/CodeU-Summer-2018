@@ -61,7 +61,7 @@
      <% } %>
   </h2>
 <center>
-______________________________________________________________________________________________________________________________________________
+________________________________________________________________________________________________
 
 
 <h2>About <%= request.getSession().getAttribute("user")%>: </h2>
@@ -75,24 +75,26 @@ ________________________________________________________________________________
         bio = "";
       }
       %>
-      <input type="text" name="bio" value="<%= bio%>" >
+      <textarea type="text" name="bio" value="<%= bio%>" placeholder="Tell us about yourself..." height="200" width="400"></textarea>
       <button type="submit">Submit</button>
-</form>
+</form></textarea>
 <div>
 
 </div>
-<%List<Conversation> conversations =
+<%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
+
+<!--<%List<Conversation> conversations =
  (List<Conversation>) request.getAttribute("conversations");
-%>
+%>-->
 <div id="feed"> 
  <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
 
     <%
-    if(conversations != null && !conversations.isEmpty()) {
-      for(Conversation conversation : conversations){
+    if(userConvos != null && !userConvos.isEmpty()) {
+      for(Conversation userConvo : userConvos){
     %>
-      <li><h3><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></h3></li>
+      <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
+       
     <%
       }
     }

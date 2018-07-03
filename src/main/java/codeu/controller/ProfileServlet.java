@@ -11,6 +11,7 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -68,6 +69,7 @@ public class ProfileServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
         String username = (String) request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         if (user == null) {
@@ -78,14 +80,17 @@ public class ProfileServlet extends HttpServlet {
           //request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
           return;
         }
+        List<Conversation> userConvos = conversationStore.getConversationWithOwner(user.getId());
+        request.setAttribute("conversations", userConvos);
         // TODO(lauren): Not all conversations, should be only conversations that belong
         // to the current user.
         //UUID ownerid = (UUID) request.getSession().getAttribute("owner");
         String requestUrl = request.getRequestURI();
         String userUrl = requestUrl.substring("/profile/".length());
         //request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
-        List <Conversation> conversations = conversationStore.getAllConversations();
-        request.setAttribute("conversations", conversations);
+
+        //List <Conversation> conversations = conversationStore.getAllConversations();
+        //request.setAttribute("conversations", conversations);
         System.out.println("In doGet(), user.getBio(): "+ user.getBio());
         request.setAttribute("bio", user.getBio());
         request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
