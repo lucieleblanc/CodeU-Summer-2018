@@ -25,6 +25,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -172,7 +173,8 @@ public class PersistentDataStore {
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        Blob content = new Blob((byte[]) entity.getProperty("content"));
+        byte[] contentBytes = ((String) entity.getProperty("content")).getBytes(StandardCharsets.UTF_8);
+        Blob content = new Blob(contentBytes);
         Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content);
         media.add(singleMedia);
       } catch (Exception e) {
@@ -227,7 +229,7 @@ public class PersistentDataStore {
     mediaEntity.setProperty("owner_uuid", singleMedia.getOwnerId().toString());
     mediaEntity.setProperty("title", singleMedia.getTitle());
     mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
-    mediaEntity.setProperty("content", singleMedia.getContent().getBytes());
+    mediaEntity.setProperty("content", singleMedia.getContent().getBytes().toString());
     datastore.put(mediaEntity);
   }
 }
