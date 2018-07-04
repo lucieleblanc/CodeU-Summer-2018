@@ -18,7 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Media;
-import codeu.model.store.persistence.PersistentDataStoreException;
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -151,6 +151,41 @@ public class PersistentDataStore {
     return messages;
   }
 
+  /**
+   * Loads all Media objects from the Datastore service and returns them in a List, sorted in
+   * ascending order by creation time.
+   *
+   * @throws PersistentDataStoreException if an error was detected during the load from the
+   *     Datastore service
+   */
+  public List<Media> loadMedia() throws PersistentDataStoreException {
+
+    List<Media> media = new ArrayList<>();
+
+    // Retrieve all conversations from the datastore.
+    Query query = new Query("chat-media").addSort("creation_time", SortDirection.ASCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
+        UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
+        String title = (String) entity.getProperty("title");
+        Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        Blob content = new Blob((byte[]) entity.getProperty("content"));
+        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content);
+        media.add(singleMedia);
+      } catch (Exception e) {
+        // In a production environment, errors should be very rare. Errors which may
+        // occur include network errors, Datastore service errors, authorization errors,
+        // database entity definition mismatches, or service mismatches.
+        throw new PersistentDataStoreException(e);
+      }
+    }
+
+    return media;
+  }
+
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
     Entity userEntity = new Entity("chat-users", user.getId().toString());
@@ -183,5 +218,16 @@ public class PersistentDataStore {
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     datastore.put(conversationEntity);
+  }
+
+  /** Write a Media object to the Datastore service. */
+  public void writeThrough(Media singleMedia) {
+    Entity mediaEntity = new Entity("chat-media", singleMedia.getId().toString());
+    mediaEntity.setProperty("uuid", singleMedia.getId().toString());
+    mediaEntity.setProperty("owner_uuid", singleMedia.getOwnerId().toString());
+    mediaEntity.setProperty("title", singleMedia.getTitle());
+    mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
+    mediaEntity.setProperty("content", singleMedia.getContent().getBytes());
+    datastore.put(mediaEntity);
   }
 }
