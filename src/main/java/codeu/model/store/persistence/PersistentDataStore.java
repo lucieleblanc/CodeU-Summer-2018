@@ -18,7 +18,6 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Media;
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -174,8 +173,7 @@ public class PersistentDataStore {
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         byte[] contentBytes = ((String) entity.getProperty("content")).getBytes(StandardCharsets.UTF_8);
-        Blob content = new Blob(contentBytes);
-        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content);
+        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, contentBytes);
         media.add(singleMedia);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may

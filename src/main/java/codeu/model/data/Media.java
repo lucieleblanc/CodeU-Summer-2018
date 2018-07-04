@@ -1,6 +1,5 @@
 package codeu.model.data;
 
-import com.google.appengine.api.datastore.Blob;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.UUID;
@@ -14,7 +13,7 @@ public class Media {
   private final UUID owner;
   private final Instant creation;
   private final String title;
-  private final Blob content;
+  private final byte[] content;
 
   /**
    * Constructs a new Media object.
@@ -25,7 +24,7 @@ public class Media {
    * @param creation the creation time of this Media
    * @param content the content of this media
    */
-  public Media(UUID id, UUID owner, String title, Instant creation, Blob content) {
+  public Media(UUID id, UUID owner, String title, Instant creation, byte[] content) {
     this.id = id;
     this.owner = owner;
     this.title = title;
@@ -55,6 +54,6 @@ public class Media {
 
   /** Returns the content of this Media. */
   public byte[] getContent() {
-    return content.getBytes();
+    return content;
   }
 }
