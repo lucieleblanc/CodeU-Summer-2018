@@ -1,6 +1,7 @@
 package codeu.model.data;
 
 import com.google.appengine.api.datastore.Blob;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -53,7 +54,7 @@ public class Media {
   }
 
   /** Returns the content of this Media. */
-  public Blob getContent() {
-    return content;
+  public byte[] getContent() {
+    return content.getBytes();
   }
 }

@@ -229,7 +229,7 @@ public class PersistentDataStore {
     mediaEntity.setProperty("owner_uuid", singleMedia.getOwnerId().toString());
     mediaEntity.setProperty("title", singleMedia.getTitle());
     mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
-    mediaEntity.setProperty("content", singleMedia.getContent().getBytes().toString());
+    mediaEntity.setProperty("content", singleMedia.getContent().toString());
     datastore.put(mediaEntity);
   }
 }
