@@ -3,9 +3,9 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Bio" %>
+<%@ page import="codeu.model.data.Media" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%@ page import="codeu.model.data.Bio"%>
-
 
 
 
@@ -57,6 +57,9 @@
       <h2>To see your profile,<a href="/login"> login.</a></h2>
      <% } %>
   </h2>
+
+<!-- <% String url = (String)request.getAttribute("url");%> -->
+<img src="${pageContext.request.contextPath}/images/foo.png" alt="Profile Image Here" width="500" height="333">
 
 <form action="/profile.jsp" method="POST">
       About Me:
