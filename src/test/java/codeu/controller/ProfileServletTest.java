@@ -20,20 +20,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ProfileServletTest {
 
-  private ConversationServlet conversationServlet;
+  private ProfileServlet profileServlet;
   private HttpServletRequest mockRequest;
   private HttpSession mockSession;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
   private ConversationStore mockConversationStore;
   private UserStore mockUserStore;
+  private User fakeUser;
 
   @Before
   public void setup() {
-    /*profileServlet = new ProfileServlet();
+    profileServlet = new ProfileServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
     mockSession = Mockito.mock(HttpSession.class);
@@ -46,22 +49,39 @@ public class ProfileServletTest {
 
 
    	mockConversationStore = Mockito.mock(ConversationStore.class);
-    conversationServlet.setConversationStore(mockConversationStore);
+    profileServlet.setConversationStore(mockConversationStore);
 
     mockUserStore = Mockito.mock(UserStore.class);
-    profileServlet.setUserStore(mockUserStore);*/
+    profileServlet.setUserStore(mockUserStore);
+
+    // Mockito.when() below is because in ProfileServlet.doGet(), it will call
+    // String username = (String) request.getSession().getAttribute("user");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    // fakeUser and Mockito.when() below is because in ProfileServlet.doGet(),
+    // it would call User user = userStore.getUser(username);
+    fakeUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now(),
+            "test_bio");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
   }
 
-  @Test 
+  @Test
   public void testGetConversationOwner () throws IOException, ServletException {
-    /*HashMap<UUID, Conversation> fakeConvoHashmap = new HashMap<>();
+    // Linese below because in ProfileServlet.doGet(), it will do
+    // List<Conversation> userConvos = conversationStore.getConversationWithOwner(user.getId());
+    // request.setAttribute("conversations", userConvos);
+    List<Conversation> fakeConvoHashmap = new ArrayList();
     fakeConvoHashmap.add(
       new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_convo", Instant.now()));
-    Mockito.when(mockConversationStore.testGetConversationOwner()).thenReturn(fakeConvoHashmap);
+    Mockito.when(mockConversationStore.getConversationWithOwner(fakeUser.getId())).thenReturn(fakeConvoHashmap);
 
     profileServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("conversations", fakeConvoHashmap);
-    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);*/
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
