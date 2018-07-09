@@ -1,8 +1,10 @@
 
 package codeu.controller;
 
+import codeu.model.data.Media;
 import codeu.model.store.basic.MediaStore;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,10 +30,17 @@ public class MediaServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+     
+      UUID randomUUID = UUID.randomUUID();
+      UUID parentUUID = UUID.randomUUID();
+
+      // String stringBytes = "";
+      // byte[] someBytes = stringBytes.getBytes(StandardCharsets.UTF_8);
+      // Media picture = new Media(randomUUID, parentUUID,"Media Title", Instant.now(), someBytes);
 
       String imageName = request.getPathInfo().substring(1);
 
-      byte[] content = mediaStore.getMediaWithId(UUID.randomUUID()).getContent();
+      byte[] content = mediaStore.getMediaWithId(randomUUID).getContent();
       response.setContentType(getServletContext().getMimeType(imageName));
   	  response.setContentLength(content.length);
   	  response.getOutputStream().write(content);
