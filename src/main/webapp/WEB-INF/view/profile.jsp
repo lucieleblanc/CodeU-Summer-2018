@@ -6,9 +6,8 @@
 <%@ page import="codeu.model.data.Bio" %>
 <%@ page import="codeu.model.data.Media" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-
-
-
+<%@ page import="codeu.model.data.Bio"%>
+<%@ page import="codeu.model.data.Event"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,17 +45,25 @@
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
-    <a href="/profile.jsp">Profile</a>
-  </nav>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+    <!--<% String user = (String)request.getSession().getAttribute("user");%>-->
+    <a href="/profile/<%=user%>" >My Profile</a>  
+    <%} else{%>
+      <a href="/login"> My Profile</a>
+    <% } %>  
+      </nav>
 
-
+<center>
  <h2>
 <% if(request.getSession().getAttribute("user") != null){ %>
-      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1>
+      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1></center>
       <% } else{ %>
       <h2>To see your profile,<a href="/login"> login.</a></h2>
      <% } %>
   </h2>
+<center>
+________________________________________________________________________________________________
+
 
 <!-- <% String url = (String)request.getAttribute("url");%> -->
 <!-- <img src="${pageContext.request.contextPath}/images/foo.png" alt="Profile Image Here" width="500" height="333"> -->
@@ -587,9 +594,8 @@ oLEhS7JDIZmyYqYA5yvuMc+annHL+Z6SlYBQ1FRSDJagvLEYzUiQUgOILsZu9tKOGvAieUmtOYkH
 4mo6T0fPlgoRJtnf470gG/8AmGfNZ/8APlr/AKIbUNGsduwOGW75pyks0LmFxR/8/wD3TKgpQIlv
 90qgBSJDJzmkiQssA+wpszmZ/vpyqjKt1/8AyN//2Q==" alt="Profile Image Here" width="500" height="333">
 
-
-<form action="/profile.jsp" method="POST">
-      About Me:
+<form action="/profile/" method="POST">
+      About <%= request.getSession().getAttribute("user")%>:
       <%
       // NOTE(fang): Not request.getSession().getAttribute(). 
       String bio = (String)request.getAttribute("bio");
@@ -597,36 +603,43 @@ oLEhS7JDIZmyYqYA5yvuMc+annHL+Z6SlYBQ1FRSDJagvLEYzUiQUgOILsZu9tKOGvAieUmtOYkH
         bio = "";
       }
       %>
-      <input type="text" name="bio" value="<%= bio%>" >
+      <textarea type="text" name="bio" value="<%= bio%>" placeholder="Tell us about yourself..." height="200" width="400"></textarea>
       <button type="submit">Submit</button>
-</form>
-
-<h1>Your Bio: </h1>
--------------------------------------------------------------
+</form></textarea>
 <div>
-<%= (String)request.getAttribute("bio")%> 
-</div>
--------------------------------------------------------------
 
-<%List<Conversation> conversations =
+</div>
+<%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
+
+<!--<%List<Conversation> conversations =
  (List<Conversation>) request.getAttribute("conversations");
-%>
-<div id="feed">
-  <h1><%= request.getSession().getAttribute("user")%> 's Conversations:</h1>
+%>-->
+<div id="feed"> 
+ <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
 
     <%
-    if(conversations != null && !conversations.isEmpty()) {
-      for(Conversation conversation : conversations){
+    if(userConvos != null && !userConvos.isEmpty()) {
+      for(Conversation userConvo : userConvos){
     %>
-      <li><h3><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></h3></li>
+      <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
+       
     <%
       }
     }
     %>
+
+</center>
+_____________________________________________________________________________________________________________________________________________
+
+
+
+
+  <!--<div id="feed">
+<center>
+   
 </div>
-  </div>
+  </div></center>
 
-
+-->
 </body>
 </html>

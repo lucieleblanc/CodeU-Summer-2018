@@ -15,6 +15,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,9 @@ public class ConversationStore {
     return conversations;
   }
 
+//public List<ConversationSpec> getConversationWithId(){
+
+//}
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);
@@ -107,9 +111,18 @@ public class ConversationStore {
       return null;
     }
   }
-
+public List<Conversation> getConversationWithOwner(UUID userId){
+  List<Conversation> userConvos = new ArrayList();//UUID curUserID = request.getSession().getAttribute("user"); (how does it know to get this from the user class vs the conversation class)
+  for(Conversation conversation: conversations)
+  {
+    if(conversation.getOwnerId() == userId){
+      userConvos.add(conversation);
+    }
+  }
+  return userConvos;
+}
   /** Find and return the Conversation with the given Id. */
-  public Conversation getConversationWithId(UUID id) {
+  public Conversation getConversationWithId(UUID id){
     if (conversationIdMap.containsKey(id)) {
       return conversationIdMap.get(id);
     }
