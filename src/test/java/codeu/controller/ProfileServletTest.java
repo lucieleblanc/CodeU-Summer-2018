@@ -23,17 +23,19 @@ import org.mockito.Mockito;
 
 public class ProfileServletTest {
 
-  private ConversationServlet conversationServlet;
+  private ProfileServlet profileServlet;
   private HttpServletRequest mockRequest;
   private HttpSession mockSession;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
   private ConversationStore mockConversationStore;
   private UserStore mockUserStore;
+  private ConversationStore conversationStore;
+  private UserStore userStore;
 
   @Before
   public void setup() {
-    /*profileServlet = new ProfileServlet();
+    profileServlet = new ProfileServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
     mockSession = Mockito.mock(HttpSession.class);
@@ -46,22 +48,26 @@ public class ProfileServletTest {
 
 
    	mockConversationStore = Mockito.mock(ConversationStore.class);
-    conversationServlet.setConversationStore(mockConversationStore);
+    profileServlet.setConversationStore(mockConversationStore);
 
     mockUserStore = Mockito.mock(UserStore.class);
-    profileServlet.setUserStore(mockUserStore);*/
+    profileServlet.setUserStore(mockUserStore);
   }
 
   @Test 
-  public void testGetConversationOwner () throws IOException, ServletException {
-    /*HashMap<UUID, Conversation> fakeConvoHashmap = new HashMap<>();
-    fakeConvoHashmap.add(
+  public void testGetConversationWithOwner() throws IOException, ServletException {
+   List<Conversation> fakeConvoList = new ArrayList<>();
+    fakeConvoList.add(
       new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_convo", Instant.now()));
-    Mockito.when(mockConversationStore.testGetConversationOwner()).thenReturn(fakeConvoHashmap);
+
+    String username = (String) mockRequest.getSession().getAttribute("user");
+    User user = mockUserStore.getUser(username);
+    Mockito.when(mockConversationStore.getConversationWithOwner(user.getId()))
+    	.thenReturn(fakeConvoList);
 
     profileServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest).setAttribute("conversations", fakeConvoHashmap);
-    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);*/
+    Mockito.verify(mockRequest).setAttribute("conversations", fakeConvoList);
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
