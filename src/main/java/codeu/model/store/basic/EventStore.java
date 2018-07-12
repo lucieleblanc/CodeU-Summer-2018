@@ -98,7 +98,7 @@ public class EventStore{
   }
  
   /** Convert converations, messages, and users to event types. */
-  private void convertToEvents(){
+  private void convertToEvents() {
   	for(Conversation conversation: conversations){
     	events.add(new Event(conversation));
     }
@@ -108,5 +108,10 @@ public class EventStore{
     for(User user: users){
     	events.add(new Event(user));
     }
+  }
+
+  /**Add an event to the list of events. */
+  public void addEvent(Event event){
+    events.add(event);
   }
 }

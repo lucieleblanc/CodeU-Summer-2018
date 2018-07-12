@@ -63,7 +63,6 @@ public class Event{
     authorIdForConversation = conversation.getOwnerId();
     conversationCreationTime = conversation.getCreationTime();
     conversationId = conversation.getId();
-
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
