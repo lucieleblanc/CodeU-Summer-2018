@@ -93,6 +93,8 @@ public class Event{
 
     messageCreationTime = message.getCreationTime();
     authorIdForMessage = message.getAuthorId();
+
+    Boolean error = false;
     try {
       conversationStore.getConversationWithId(message
         .getConversationId()).getTitle();
@@ -108,9 +110,15 @@ public class Event{
                          " appegine for to see if the conversation exists." + 
                          " _______________________________________________" +
                          "\n_______________________________________________");
+      error = true;
     }
-    conversationTitleOfMessage = conversationStore.getConversationWithId(
-      message.getConversationId()).getTitle();
+    if(error) {
+      conversationTitleOfMessage = null;
+    }
+    else {
+      conversationTitleOfMessage = conversationStore.getConversationWithId(
+        message.getConversationId()).getTitle();
+    }
 
     messageContent = message.getContent();
     messageId = message.getId();
