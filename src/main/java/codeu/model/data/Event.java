@@ -178,7 +178,6 @@ public class Event{
     conversationTitleOfMessage = null;
     messageContent = null;
     messageId = null;
-
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
     userId = user.getId();
