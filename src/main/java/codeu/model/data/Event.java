@@ -187,9 +187,9 @@ public class Event{
 	public String toString() {
 
 	  if(eventType == EventType.CONVERSATION) {
-        return toString(conversationCreationTime) + ": "+ 
+        return toString(conversationCreationTime) + " PST: "+ 
           userStore.getUser(authorIdForConversation).getName() + 
-          " created a new conversation: " + titleOfConversation;
+          " created a new conversation: ";
 	  }
 	  if(eventType == EventType.MESSAGE) {
         return toString(messageCreationTime) + " PST: " + 
@@ -216,6 +216,10 @@ public class Event{
 
     return formattedTime;
 	}
+
+  public String getTitleOfConversation() {
+    return titleOfConversation;
+  }
 
 	/** Returns the type of event that the object is. */
 	public EventType getEventType() { 
