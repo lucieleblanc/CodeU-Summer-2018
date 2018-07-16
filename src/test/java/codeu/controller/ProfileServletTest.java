@@ -34,24 +34,22 @@ public class ProfileServletTest {
   private UserStore mockUserStore;
   private User fakeUser;
 
+
   @Before
-  public void setup() {
-    profileServlet = new ProfileServlet();
+   public void setup() {
 
-    mockRequest = Mockito.mock(HttpServletRequest.class);
-    mockSession = Mockito.mock(HttpSession.class);
-    Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
+   profileServlet = new ProfileServlet();
+ 
+     mockRequest = Mockito.mock(HttpServletRequest.class);
+     mockSession = Mockito.mock(HttpSession.class);
 
-    mockResponse = Mockito.mock(HttpServletResponse.class);
-    mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
-    Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/profile.jsp"))
-        .thenReturn(mockRequestDispatcher);
+ 
+ 
+      mockConversationStore = Mockito.mock(ConversationStore.class);
+      profileServlet.setConversationStore(mockConversationStore);
+ 
+     mockUserStore = Mockito.mock(UserStore.class);
 
-
-   	mockConversationStore = Mockito.mock(ConversationStore.class);
-    profileServlet.setConversationStore(mockConversationStore);
-
-    mockUserStore = Mockito.mock(UserStore.class);
     profileServlet.setUserStore(mockUserStore);
 
     // Mockito.when() below is because in ProfileServlet.doGet(), it will call
@@ -67,7 +65,7 @@ public class ProfileServletTest {
             Instant.now(),
             "test_bio");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
-  }
+   }
 
   @Test
   public void testGetConversationOwner () throws IOException, ServletException {
