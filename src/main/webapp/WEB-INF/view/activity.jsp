@@ -53,11 +53,20 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 
 <div id="feed">
   <ul>
-   <%
+    <%
       for(Event event: events){
-   %>
-        <li><%= event.toString() %></li>
-   <%     
+    %>
+        <li><%= event.toString() %>
+        <%
+        if(event.getEventType().toString() == "CONVERSATION") {
+        %>
+        <a href="/chat/<%=event.getTitleOfConversation()%>">
+            <%= event.getTitleOfConversation()%></li>
+        </a>
+        <%
+          }
+        %> 
+    <%     
       }
     %>
   </ul>

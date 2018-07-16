@@ -85,8 +85,10 @@ public class ProfileServlet extends HttpServlet {
         // TODO(lauren): Not all conversations, should be only conversations that belong
         // to the current user.
         //UUID ownerid = (UUID) request.getSession().getAttribute("owner");
-        String requestUrl = request.getRequestURI();
-        String userUrl = requestUrl.substring("/profile/".length());
+        // Fang: not sure what you are trying to do with userUrl below,
+        // commenting out because they are causing NPE in unit test.
+        // String requestUrl = request.getRequestURI();
+        // String userUrl = requestUrl.substring("/profile/".length());
         //request.getRequestDispatcher("/WEB-INF/view/profile/").forward(request, response);
 
         //List <Conversation> conversations = conversationStore.getAllConversations();

@@ -1,6 +1,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -56,10 +57,13 @@ public class ConversationStoreTest {
   }
   
   @Test 
-  public void testGetConversationWithOwner(){
+  public List<Conversation> testGetConversationWithOwner(){
     List<Conversation> fakeConvoList = 
         conversationStore.getConversationWithOwner(CONVERSATION_USERID);
-  assertEquals(fakeConvoList, conversationList);
+  for(int i = 0; i < fakeConvoList.size(); i++){
+    assertEquals(fakeConvoList.get(i), conversationList.get(i));
+    }
+    return fakeConvoList;
   }
 
   @Test
@@ -103,4 +107,8 @@ public class ConversationStoreTest {
     Assert.assertEquals(
         expectedConversation.getCreationTime(), actualConversation.getCreationTime());
   }
+  /*private void assertEqualsL (List expectedList, List actual List){
+    Assert.assertEqualsL(expectedList)
+  }*/
+
 }

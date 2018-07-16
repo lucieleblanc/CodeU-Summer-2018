@@ -63,7 +63,6 @@ public class Event{
     authorIdForConversation = conversation.getOwnerId();
     conversationCreationTime = conversation.getCreationTime();
     conversationId = conversation.getId();
-
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
@@ -94,6 +93,8 @@ public class Event{
 
     messageCreationTime = message.getCreationTime();
     authorIdForMessage = message.getAuthorId();
+
+    Boolean error = false;
     try {
       conversationStore.getConversationWithId(message
         .getConversationId()).getTitle();
@@ -109,9 +110,15 @@ public class Event{
                          " appegine for to see if the conversation exists." + 
                          " _______________________________________________" +
                          "\n_______________________________________________");
+      error = true;
     }
-    conversationTitleOfMessage = conversationStore.getConversationWithId(
-      message.getConversationId()).getTitle();
+    if(error) {
+      conversationTitleOfMessage = null;
+    }
+    else {
+      conversationTitleOfMessage = conversationStore.getConversationWithId(
+        message.getConversationId()).getTitle();
+    }
 
     messageContent = message.getContent();
     messageId = message.getId();
@@ -171,7 +178,6 @@ public class Event{
     conversationTitleOfMessage = null;
     messageContent = null;
     messageId = null;
-
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
     userId = user.getId();
@@ -181,9 +187,9 @@ public class Event{
 	public String toString() {
 
 	  if(eventType == EventType.CONVERSATION) {
-        return toString(conversationCreationTime) + ": "+ 
+        return toString(conversationCreationTime) + " PST: "+ 
           userStore.getUser(authorIdForConversation).getName() + 
-          " created a new conversation: " + titleOfConversation;
+          " created a new conversation: ";
 	  }
 	  if(eventType == EventType.MESSAGE) {
         return toString(messageCreationTime) + " PST: " + 
@@ -200,7 +206,7 @@ public class Event{
 	  }
 	}
 
-    /** Formats time of type Instant into a string. */
+  /** Formats time of type Instant into a string. */
 	public String toString(Instant unformattedTime) {
 	  DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
       .withLocale(Locale.US)
@@ -211,15 +217,19 @@ public class Event{
     return formattedTime;
 	}
 
+  public String getTitleOfConversation() {
+    return titleOfConversation;
+  }
+
 	/** Returns the type of event that the object is. */
 	public EventType getEventType() { 
     return eventType;
 	}
 
-    /** 
-     *  Returns seconds from the time Java was created 
-     *  to the time the event was created as a Long. 
-     */
+  /** 
+   *  Returns seconds from the time Java was created 
+   *  to the time the event was created as a Long. 
+   */
 	public long getCreationTime() {
 		if(eventType == EventType.USER) {
 			return userCreationTime.getEpochSecond();
