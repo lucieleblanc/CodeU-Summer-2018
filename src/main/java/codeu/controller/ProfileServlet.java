@@ -70,6 +70,7 @@ public class ProfileServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
+
         String username = (String) request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         if (user == null) {
