@@ -24,11 +24,17 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import java.nio.charset.StandardCharsets;
+import com.google.appengine.api.datastore.Text;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -172,8 +178,13 @@ public class PersistentDataStore {
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        byte[] contentBytes = ((String) entity.getProperty("content")).getBytes(StandardCharsets.UTF_8);
-        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, contentBytes);
+        String contentString = ((Text) entity.getProperty("content")).getValue();
+        byte[] contentBytes = new BigInteger(contentString, 16).toByteArray();
+        InputStream in = new ByteArrayInputStream(contentBytes);
+        BufferedImage content = ImageIO.read(in);
+        String contentType = (String) entity.getProperty("contentType");
+        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content, contentType);
+        singleMedia.setIsProfilePicture(Boolean.valueOf((String) entity.getProperty("isProfilePicture")));
         media.add(singleMedia);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -221,13 +232,35 @@ public class PersistentDataStore {
   }
 
   /** Write a Media object to the Datastore service. */
-  public void writeThrough(Media singleMedia) {
+  public void writeThrough(Media singleMedia) throws java.io.IOException {
     Entity mediaEntity = new Entity("chat-media", singleMedia.getId().toString());
     mediaEntity.setProperty("uuid", singleMedia.getId().toString());
     mediaEntity.setProperty("owner_uuid", singleMedia.getOwnerId().toString());
     mediaEntity.setProperty("title", singleMedia.getTitle());
     mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
-    mediaEntity.setProperty("content", singleMedia.getContent().toString());
+    
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ImageIO.write(singleMedia.getContent(), "jpg", baos);
+    byte[] contentBytes = baos.toByteArray();
+    String contentString = bytesToHex(contentBytes);
+    Text contentText = new Text(contentString);
+    mediaEntity.setProperty("content", contentText);
+
+    mediaEntity.setProperty("contentType", singleMedia.getContentType());
+    mediaEntity.setProperty("isProfilePicture", singleMedia.getIsProfilePicture().toString());
+    
     datastore.put(mediaEntity);
+
+  }
+
+  private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+  public static String bytesToHex(byte[] bytes) {
+    char[] hexChars = new char[bytes.length * 2];
+    for ( int j = 0; j < bytes.length; j++ ) {
+        int v = bytes[j] & 0xFF;
+        hexChars[j * 2] = hexArray[v >>> 4];
+        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+    }
+    return new String(hexChars);
   }
 }
