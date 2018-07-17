@@ -47,6 +47,7 @@ public class MediaStore {
   private List<Media> media;
   private HashMap<UUID, Media> mediaIdMap;
   private HashMap<String, Media> mediaTitleMap;
+  private HashMap<String, Media> profilePictureMap;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private MediaStore(PersistentStorageAgent persistentStorageAgent) {
@@ -54,6 +55,7 @@ public class MediaStore {
     media = new ArrayList<>();
     mediaIdMap = new HashMap<>();
     mediaTitleMap = new HashMap<>();
+    profilePictureMap = new HashMap<>();
   }
 
   /** Access the current set of media known to the application. */
@@ -62,7 +64,7 @@ public class MediaStore {
   }
 
   /** Add a new media to the current set of media known to the application. */
-  public void addMedia(Media singleMedia) {
+  public void addMedia(Media singleMedia) throws java.io.IOException {
     media.add(singleMedia);
     mediaIdMap.put(
       singleMedia.getId(), singleMedia);
@@ -110,11 +112,30 @@ public class MediaStore {
   /** Sets the List of media stored by this mediatore. */
   public void setMedia(List<Media> media) {
     this.media = media;
+    UserStore userStore = UserStore.getInstance();
     for(Media singleMedia: media) {
       mediaIdMap.put(
         singleMedia.getId(), singleMedia);
       mediaTitleMap.put(
         singleMedia.getTitle(), singleMedia);
+      if(singleMedia.getIsProfilePicture() == true)
+      {
+        profilePictureMap.put(userStore.getUser(singleMedia.getOwnerId()).getName(), singleMedia);
+      }
     }
+  }
+
+  public Media getProfilePicture(String user) {
+    if(profilePictureMap.containsKey(user)) {
+      return profilePictureMap.get(user);
+    }
+    else {
+      return null;
+    }
+  }
+
+  public void setProfilePicture(String user, Media singleMedia) {
+    profilePictureMap.put(user, singleMedia);
+    singleMedia.setIsProfilePicture(true);
   }
 }

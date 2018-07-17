@@ -1,6 +1,6 @@
 package codeu.model.data;
 
-import java.nio.charset.StandardCharsets;
+import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -13,8 +13,9 @@ public class Media {
   private final UUID owner;
   private final Instant creation;
   private final String title;
-  private final byte[] content;
-
+  private final BufferedImage content;
+  private final String contentType;
+  private Boolean isProfilePicture;
   /**
    * Constructs a new Media object.
    *
@@ -24,12 +25,14 @@ public class Media {
    * @param creation the creation time of this Media
    * @param content the content of this media
    */
-  public Media(UUID id, UUID owner, String title, Instant creation, byte[] content) {
+  public Media(UUID id, UUID owner, String title, Instant creation, BufferedImage content, String contentType) {
     this.id = id;
     this.owner = owner;
     this.title = title;
     this.creation = creation;
     this.content = content;
+    this.contentType = contentType;
+    this.isProfilePicture = false;
   }
 
   /** Returns the ID of this Media. */
@@ -53,7 +56,19 @@ public class Media {
   }
 
   /** Returns the content of this Media. */
-  public byte[] getContent() {
+  public BufferedImage getContent() {
     return content;
+  }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setIsProfilePicture(Boolean bool) {
+    isProfilePicture = bool;
+  }
+
+  public Boolean getIsProfilePicture() {
+    return isProfilePicture;
   }
 }
