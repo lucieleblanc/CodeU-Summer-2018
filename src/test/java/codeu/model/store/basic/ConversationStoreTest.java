@@ -21,7 +21,7 @@ public class ConversationStoreTest {
   private final Conversation CONVERSATION_ONE =
       new Conversation(
           CONVERSATION_ID, CONVERSATION_USERID, "conversation_one", Instant.ofEpochMilli(1000));
-  private List<Conversation> conversationList; 
+  private List<Conversation> conversationList;
 
   @Before
   public void setup() {
@@ -55,15 +55,14 @@ public class ConversationStoreTest {
 
     assertEquals(CONVERSATION_ONE, resultConversation);
   }
-  
-  @Test 
-  public List<Conversation> testGetConversationWithOwner(){
-    List<Conversation> fakeConvoList = 
+
+  @Test
+  public void testGetConversationWithOwner(){
+    List<Conversation> fakeConvoList =
         conversationStore.getConversationWithOwner(CONVERSATION_USERID);
-  for(int i = 0; i < fakeConvoList.size(); i++){
-    assertEquals(fakeConvoList.get(i), conversationList.get(i));
+    for(int i = 0; i < fakeConvoList.size(); i++){
+      assertEquals(fakeConvoList.get(i), conversationList.get(i));
     }
-    return fakeConvoList;
   }
 
   @Test

@@ -39,15 +39,18 @@ public class ProfileServletTest {
    public void setup() {
 
    profileServlet = new ProfileServlet();
- 
+
      mockRequest = Mockito.mock(HttpServletRequest.class);
      mockSession = Mockito.mock(HttpSession.class);
+     Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
+     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
+     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/profile.jsp"))
+         .thenReturn(mockRequestDispatcher);
+     mockResponse = Mockito.mock(HttpServletResponse.class);
 
- 
- 
       mockConversationStore = Mockito.mock(ConversationStore.class);
       profileServlet.setConversationStore(mockConversationStore);
- 
+
      mockUserStore = Mockito.mock(UserStore.class);
 
     profileServlet.setUserStore(mockUserStore);
