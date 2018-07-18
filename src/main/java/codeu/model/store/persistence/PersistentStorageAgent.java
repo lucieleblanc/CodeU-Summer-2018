@@ -116,7 +116,7 @@ public class PersistentStorageAgent {
   }
 
   /** Write a Media object to the Datastore service. */
-  public void writeThrough(Media singleMedia) {
+  public void writeThrough(Media singleMedia) throws java.io.IOException  {
     persistentDataStore.writeThrough(singleMedia);
   }
 }
