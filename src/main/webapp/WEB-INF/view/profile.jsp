@@ -1,13 +1,13 @@
-
+<%@ page import="java.io.*"%>
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Bio" %>
+<%@ page import="codeu.model.data.Media" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%
-List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
-%>
-
-
+<%@ page import="codeu.model.data.Bio"%>
+<%@ page import="codeu.model.data.Event"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,61 +45,104 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
-    <a href="/profile.jsp">Profile</a>
-  </nav>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+    <!--<% String user = (String)request.getSession().getAttribute("user");%>-->
+    <a href="/profile/<%=user%>" >My Profile</a>  
+    <%} else{%>
+      <a href="/login"> My Profile</a>
+    <% } %>  
+      </nav>
 
-
+<center>
  <h2>
 <% if(request.getSession().getAttribute("user") != null){ %>
-      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1>
+      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1></center>
       <% } else{ %>
       <h2>To see your profile,<a href="/login"> login.</a></h2>
      <% } %>
   </h2>
+<center>
 
------------------------------------------------------------------------------------------------------
+<!--src fires a get request calling doGet() of the FileUploadServlet-->
+<img src="FileUploadServlet" alt="Upload a profile image" width="500" height="333">
 
 
-    <form action="/profile.jsp">
-  First name: <input type="text" name="fname"><br>
-  Last name: <input type="text" name="lname"><br>
-  Bio: <input type="text" name="bio"><br>
-  Gender:
-  <input type="radio" name="gender" value="male"> Male<br>
-<input type="radio" name="gender" value="female"> Female<br>
-<input type="radio" name="gender" value="other"> Other
-  <input type="submit" value="Submit">
+<body>
+  <center>
+      <form id = "form" method="POST" action="FileUploadServlet" enctype="multipart/form-data">
+        <table border="0">
+          <tr>
+            <td>Title: </td>
+            <td><input type="text" name="Title" size="50"/></td>
+          </tr>
+          <tr>
+            <td>Portrait Photo: </td>
+            <td><input type="file" name="photo" size="50"/></td>  
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="submit" value="Save">
+            </td>
+          </tr>
+        </table>
+      </form>
+  </center>
+</body>
+
+
+<form action="/profile/" method="POST">
+      About <%= request.getSession().getAttribute("user")%>:
+      <%
+      // NOTE(fang): Not request.getSession().getAttribute(). 
+      String bio = (String)request.getAttribute("bio");
+      if (bio == null) {
+        bio = "";
+      }
+      %>
+      <textarea type="text" name="bio" value="<%= bio%>" placeholder="Tell us about yourself..." height="200" width="400"></textarea>
+      <button type="submit">Submit</button>
+</form></textarea>
+<div>
+
+<form id="form" method="POST" action="/profile/" enctype="multipart/form-data" target="iframe">
+  <input type="file" name="file" id="file"/>
+  <input type="submit" name="submit" id="submit" value="Upload Image"/>
+
 </form>
 
------------------------------------------------------------------------------------------------------
+<iframe name="iframe"></iframe>
 
-<div id="feed">
-  <h1><%= request.getSession().getAttribute("user")%> 's Conversations:</h1>
-    <ul class="mdl-list">
+</div>
+<%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
+
+<!--<%List<Conversation> conversations =
+ (List<Conversation>) request.getAttribute("conversations");
+%>-->
+<div id="feed"> 
+ <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
+
     <%
-      for(Conversation conversation : conversations){
+    if(userConvos != null && !userConvos.isEmpty()) {
+      for(Conversation userConvo : userConvos){
     %>
-      <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></li>
+      <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
+       
     <%
       }
+    }
     %>
-      </ul>
+
+</center>
+
+
+  <!--<div id="feed">
+<center>
+   
 </div>
-  </div>
+  </div></center>
 
-
-
-
-
-
-
------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
+-->
 </body>
 </html>
+           
+
