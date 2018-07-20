@@ -104,13 +104,7 @@
 </form></textarea>
 <div>
 
-<form id="form" method="POST" action="/profile/" enctype="multipart/form-data" target="iframe">
-  <input type="file" name="file" id="file"/>
-  <input type="submit" name="submit" id="submit" value="Upload Image"/>
-
 </form>
-
-<iframe name="iframe"></iframe>
 
 </div>
 <%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
