@@ -23,7 +23,6 @@ List<Event> events = (List<Event>) request.getAttribute("events");
   }
 </style>
 
-
     <script>
     // scroll the feed div to the bottom
       function feedChat() {
@@ -54,22 +53,21 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 
 <div id="feed">
   <ul>
-    <%
-      for(Event event: events){
-    %>
+    <% for(Event event: events){ %>
+      <% if(event.getEventType().toString() == "USER") { %>
+        <li><%=event.toString()%> 
+            <a href="/profile/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
+            joined
+        </li>
+      <% } else { %>
         <li><%= event.toString() %>
-        <%
-        if(event.getEventType().toString() == "CONVERSATION") {
-        %>
+        <% if(event.getEventType().toString() == "CONVERSATION") { %>
         <a href="/chat/<%=event.getTitleOfConversation()%>">
             <%= event.getTitleOfConversation()%></li>
         </a>
-        <%
-          }
-        %> 
-    <%     
-      }
-    %>
+        <% } %> 
+      <% } %>
+    <% } %>
   </ul>
 </div>
 

@@ -183,9 +183,12 @@ public class Event{
     userId = user.getId();
 	}
 
+  public String getNameOfUser() {
+      return nameOfUser;
+  }
+
 	/** Outputs a string based on the type given in the constructor. */
 	public String toString() {
-
 	  if(eventType == EventType.CONVERSATION) {
         return toString(conversationCreationTime) + " PST: "+ 
           userStore.getUser(authorIdForConversation).getName() + 
@@ -198,7 +201,7 @@ public class Event{
           ": " + "\"" + messageContent + "\"";
 	  }
 	  if(eventType == EventType.USER) {
-	  	return toString(userCreationTime) + " PST: " + nameOfUser + " joined!";
+	  	return toString(userCreationTime) + " PST: ";
 	  }
 	  else{
 	  	System.err.println("This object has no event type. This is impossible. I don't know how you even caused this error");
