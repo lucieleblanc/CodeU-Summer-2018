@@ -24,14 +24,14 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 </style>
 
 
-<script>
+    <script>
     // scroll the feed div to the bottom
-      function scrollFeed() {
+      function feedChat() {
         var feedDiv = document.getElementById('feed');
         feedDiv.scrollTop = feedDiv.scrollHeight;
       };
     </script>
-  </head>
+</head>
 <body onload="feedChat()">
 
   <nav>
