@@ -78,14 +78,16 @@ public class ProfileViewServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-
-        // String username = (String) request.getSession().getAttribute("user");
-        User user = userStore.getUser("123");//username);
+        String uri = request.getRequestURI();
+        String username = uri.substring(uri.lastIndexOf('/')+1);
+        User user = userStore.getUser(username);
         if (user == null) {
           return;
         }
         List<Conversation> userConvos = conversationStore.getConversationWithOwner(user.getId());
         request.setAttribute("conversations", userConvos);
+
+        request.setAttribute("username", username);
 
         System.out.println("In doGet(), user.getBio(): "+ user.getBio());
         request.setAttribute("bio", user.getBio());

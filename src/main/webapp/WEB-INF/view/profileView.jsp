@@ -16,6 +16,8 @@
 </head>
 <body>
 
+<%String username = (String) request.getAttribute("username");%>
+
 <style>
   #feed {
     background-color: white;
@@ -52,16 +54,12 @@
     <% } %>  
       </nav>
 
-<center>
- <h2>
-<% if(request.getSession().getAttribute("user") != null){ %>
-      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1></center>
-      <% } else{ %>
-      <h2>To see your profile,<a href="/login"> login.</a></h2>
-     <% } %>
-  </h2>
+<center><h1><%=username%>'s Profile Page</h1></center>
 <center>
 
+<%
+  session.setAttribute("username", username);
+%>
 <!--src fires a get request calling doGet() of the FileUploadServlet-->
 <img src="FileUploadServlet" alt="Upload a profile image" width="500" height="333">
 
@@ -69,7 +67,7 @@
 <%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
 
 <div id="feed"> 
- <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
+ <h2><%=username%>'s Conversations:</h2>
 
     <%
     if(userConvos != null && !userConvos.isEmpty()) {

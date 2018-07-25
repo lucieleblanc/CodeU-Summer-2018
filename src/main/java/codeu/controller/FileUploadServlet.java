@@ -48,8 +48,17 @@ public class FileUploadServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-      // String mediaOwner = (String)request.getSession().getAttribute("user");
-      Media picture = mediaStore.getProfilePicture("123");//mediaOwner);
+      String uri = request.getRequestURI();
+      String mediaOwner = null;
+      if(uri.equals("/profile/FileUploadServlet")) {
+        mediaOwner = (String)request.getSession().getAttribute("user");
+      }
+      else if(uri.equals("/profileView/FileUploadServlet")) {
+      	mediaOwner = (String)request.getSession().getAttribute("username");
+      }
+
+      Media picture = mediaStore.getProfilePicture(mediaOwner);
+
       if (picture!=null) {
         BufferedImage bufferedImage = picture.getContent();
         response.setContentType(picture.getContentType());
