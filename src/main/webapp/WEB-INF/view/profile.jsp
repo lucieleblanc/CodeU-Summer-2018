@@ -36,22 +36,25 @@
 <body onload="feedChat()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
-    <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-    <a href="/activity.jsp">Activity Feed</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-    <!--<% String user = (String)request.getSession().getAttribute("user");%>-->
-    <a href="/profile/<%=user%>" >My Profile</a>  
-    <%} else{%>
-      <a href="/login"> My Profile</a>
-    <% } %>  
-      </nav>
+    <div class="navItems hidden">
+      <a href="/conversations">Conversations</a>
+      <% if(request.getSession().getAttribute("user") != null){ %>
+        <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+      <% } else{ %>
+        <a href="/login">Login</a>
+      <% } %>
+      <a href="/about.jsp">About</a>
+      <a href="/activity.jsp">Activity Feed</a>
+      <% if(request.getSession().getAttribute("user") != null){ %>
+      <!--<% String user = (String)request.getSession().getAttribute("user");%>-->
+      <a href="/profile/<%=user%>" >My Profile</a>
+      <%} else{%>
+        <a href="/login"> My Profile</a>
+      <% } %>
+    </div>
+  </nav>
 
 <center>
  <h2>
@@ -77,7 +80,7 @@
           </tr>
           <tr>
             <td>Portrait Photo: </td>
-            <td><input type="file" name="photo" size="50"/></td>  
+            <td><input type="file" name="photo" size="50"/></td>
           </tr>
           <tr>
             <td colspan="2">
@@ -93,7 +96,7 @@
 <form action="/profile/" method="POST">
       About <%= request.getSession().getAttribute("user")%>:
       <%
-      // NOTE(fang): Not request.getSession().getAttribute(). 
+      // NOTE(fang): Not request.getSession().getAttribute().
       String bio = (String)request.getAttribute("bio");
       if (bio == null) {
         bio = "";
@@ -112,7 +115,7 @@
 <!--<%List<Conversation> conversations =
  (List<Conversation>) request.getAttribute("conversations");
 %>-->
-<div id="feed"> 
+<div id="feed">
  <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
 
     <%
@@ -120,7 +123,7 @@
       for(Conversation userConvo : userConvos){
     %>
       <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
-       
+
     <%
       }
     }
@@ -131,12 +134,10 @@
 
   <!--<div id="feed">
 <center>
-   
+
 </div>
   </div></center>
 
 -->
 </body>
 </html>
-           
-

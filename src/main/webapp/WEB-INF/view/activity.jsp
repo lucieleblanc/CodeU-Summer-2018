@@ -35,20 +35,23 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 <body onload="feedChat()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
-    <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-     <% if(request.getSession().getAttribute("user") != null){ %>
-    <% String user = (String)request.getSession().getAttribute("user");%>
-    <a href="/profile/<%=user%>" >My Profile</a>  
-    <%} else{%>
-      <a href="/login"> My Profile</a>
-    <% } %>
+    <div class="navItems hidden">
+      <a href="/conversations">Conversations</a>
+      <% if(request.getSession().getAttribute("user") != null){ %>
+        <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+      <% } else{ %>
+        <a href="/login">Login</a>
+      <% } %>
+      <a href="/about.jsp">About</a>
+       <% if(request.getSession().getAttribute("user") != null){ %>
+      <% String user = (String)request.getSession().getAttribute("user");%>
+      <a href="/profile/<%=user%>" >My Profile</a>
+      <%} else{%>
+        <a href="/login"> My Profile</a>
+      <% } %>
+    </div>
   </nav>
 
 <div id="feed">
@@ -65,8 +68,8 @@ List<Event> events = (List<Event>) request.getAttribute("events");
         </a>
         <%
           }
-        %> 
-    <%     
+        %>
+    <%
       }
     %>
   </ul>
@@ -77,10 +80,9 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <% if(request.getAttribute("error") != null){ %>
         <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
-    
+
     <h1>Look at all this activity!</h1>
 
   </div>
 </body>
 </html>
-
