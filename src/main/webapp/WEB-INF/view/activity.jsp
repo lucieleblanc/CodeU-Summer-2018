@@ -56,7 +56,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <% for(Event event: events){ %>
       <% if(event.getEventType().toString() == "USER") { %>
         <li><%=event.toString()%> 
-            <a href="/profile/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
+            <a href="/profileView/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
             joined
         </li>
       <% } else { %>

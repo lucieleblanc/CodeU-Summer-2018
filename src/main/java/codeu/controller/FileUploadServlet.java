@@ -21,7 +21,7 @@ import javax.servlet.http.Part;
 
 
 /* This servlet will load upon startup and map it to the URL /FileUploadServlet. */
-@WebServlet("profile/FileUploadServlet")
+@WebServlet({"profile/FileUploadServlet", "profileView/FileUploadServlet"})
 /* Max file upload size is 16 MB. */
 @MultipartConfig(maxFileSize = 16177215)
 /* Servlet Class responsible for file uploads. */ 
@@ -48,8 +48,8 @@ public class FileUploadServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-      String mediaOwner = (String)request.getSession().getAttribute("user");
-      Media picture = mediaStore.getProfilePicture(mediaOwner);
+      // String mediaOwner = (String)request.getSession().getAttribute("user");
+      Media picture = mediaStore.getProfilePicture("123");//mediaOwner);
       if (picture!=null) {
         BufferedImage bufferedImage = picture.getContent();
         response.setContentType(picture.getContentType());

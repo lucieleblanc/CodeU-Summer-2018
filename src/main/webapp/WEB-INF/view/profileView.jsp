@@ -24,7 +24,6 @@
   }
 </style>
 
-
 <script>
     // scroll the feed div to the bottom
       function scrollFeed() {
@@ -33,7 +32,7 @@
       };
     </script>
   </head>
-<body onload="feedChat()">
+<body onload="scrollFeed()">
 
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
@@ -127,5 +126,3 @@
 
 </body>
 </html>
-           
-
