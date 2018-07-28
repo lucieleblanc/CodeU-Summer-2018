@@ -25,13 +25,13 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 
     <script>
     // scroll the feed div to the bottom
-      function feedChat() {
+      function scrollFeed() {
         var feedDiv = document.getElementById('feed');
         feedDiv.scrollTop = feedDiv.scrollHeight;
       };
     </script>
 </head>
-<body onload="feedChat()">
+<body onload="scrollFeed()">
 
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>

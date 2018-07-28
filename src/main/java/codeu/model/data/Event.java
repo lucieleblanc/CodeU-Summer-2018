@@ -184,7 +184,7 @@ public class Event{
 	}
 
   public String getNameOfUser() {
-      return nameOfUser;
+    return nameOfUser;
   }
 
 	/** Outputs a string based on the type given in the constructor. */

@@ -26,7 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-/* Servlet class responsible for the activity feed page. */
+/* 
+ * Servlet class responsible for the profile view page. 
+ * Alows users to view, but not edit other user's profiles.
+ */
 public class ProfileViewServlet extends HttpServlet {
 
     /* Store class that gives access to users. */
