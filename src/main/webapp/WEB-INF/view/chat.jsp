@@ -86,11 +86,16 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
     <hr/>
 
-    <% if (request.getSession().getAttribute("user") != null) { %>
+  <%
+    String chatName = (String) request.getAttribute("chatName");
+    session.setAttribute("chatName", chatName);
+  %>
+
+  <% if (request.getSession().getAttribute("user") != null) { %>
     <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="text" name="message">
+      <input type="text" name="message">
         <br/>
-        <button type="submit">Send</button>
+         <button type="submit">Send</button>
     </form>
     <form id = "form" method="POST" action="FileUploadServlet" enctype="multipart/form-data">
       <table border="0">

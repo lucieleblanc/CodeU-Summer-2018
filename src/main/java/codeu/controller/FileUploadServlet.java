@@ -78,8 +78,14 @@ public class FileUploadServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-	    /* Title given by user in profile.jsp. */
-        String mediaTitle = (String)request.getParameter("Title"); 
+      	String uri = request.getRequestURI();
+	    
+	    String mediaTitle = null;
+	    if(!uri.equals("/chat/FileUploadServlet")) {
+	      /* Title given by user in profile.jsp. */
+          mediaTitle = (String)request.getParameter("Title"); 
+        }
+
         /* Uploader. */
         String mediaOwner = (String)request.getSession().getAttribute("user");
         /* Input stream of the upload file. */
@@ -87,6 +93,12 @@ public class FileUploadServlet extends HttpServlet {
 
 		/* Get the file chosen by the user. */
 		Part filePart = request.getPart("photo");
+
+		/* Get the name of the chat this came from. */
+		String chatName = null;
+		if(uri.equals("/chat/FileUploadServlet")) {
+		  chatName = (String)request.getSession().getAttribute("chatName");
+		}
 		
 		/* Get the InputStream to store the file. */
 	    if(filePart != null) {
@@ -106,11 +118,20 @@ public class FileUploadServlet extends HttpServlet {
 	      if(mediaStore.getProfilePicture(user.getName())!=null) {
 	        mediaStore.getProfilePicture(user.getName()).setIsProfilePicture(false);
 	      }
-	      mediaStore.setProfilePicture(user.getName(), media);
+	      if(uri.equals("/profile/FileUploadServlet")) {
+	      	mediaStore.setProfilePicture(user.getName(), media);
+	      }
 	      mediaStore.addMedia(media);
 	    }
         
-        response.sendRedirect("/profile/"+user.getName()); 
+        /* Redirect to profile page if that's where you posted from. */
+        if(uri.equals("/profile/FileUploadServlet")) {
+          response.sendRedirect("/profile/"+user.getName()); 
+        }
+        /* Redirect to the chat you posted from. */
+        if(uri.equals("/chat/FileUploadServlet")) {
+          response.sendRedirect("/chat/"+chatName); 
+        }
 	}
 
 	/**
