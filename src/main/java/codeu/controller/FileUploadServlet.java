@@ -22,11 +22,12 @@ import javax.servlet.http.Part;
 
 /* 
  * This servlet will load upon startup and map it to the URL /FileUploadServlet. 
- * Mapped to the profile and profile view jsp files. The profile jsp file
+ * Mapped to the profile, profile view, and chat jsp files. The profile jsp file
  * allows you to access and edit your own profile. the profile view jsp file
- * allows others to view, but not edit another user's profile.
+ * allows others to view, but not edit another user's profile. This is mapped 
+ * to the chat jsp file inorder to be able to send images in conversations.
  */
-@WebServlet({"profile/FileUploadServlet", "profileView/FileUploadServlet"})
+@WebServlet({"profile/FileUploadServlet", "profileView/FileUploadServlet", "chat/FileUploadServlet"})
 /* Max file upload size is 16 MB. */
 @MultipartConfig(maxFileSize = 16177215)
 /* Servlet Class responsible for file uploads. */ 

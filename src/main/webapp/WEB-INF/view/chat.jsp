@@ -73,17 +73,15 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <hr/>
 
     <div id="chat">
-      <ul>
-    <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
-    <%
-      }
-    %>
-      </ul>
+    <ul>
+      <%
+        for (Message message : messages) {
+          String author = UserStore.getInstance()
+            .getUser(message.getAuthorId()).getName();
+      %>
+        <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
+      <% } %>
+    </ul>
     </div>
 
     <hr/>
@@ -93,6 +91,19 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
         <input type="text" name="message">
         <br/>
         <button type="submit">Send</button>
+    </form>
+    <form id = "form" method="POST" action="FileUploadServlet" enctype="multipart/form-data">
+      <table border="0">
+        <tr>
+          <td>Upload Image: </td>
+          <td><input type="file" name="photo" size="50"/></td>  
+        </tr>
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="Send">
+        </td>
+      </tr>
+      </table>
     </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
@@ -104,3 +115,8 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
 </body>
 </html>
+
+ ------
+| -  - |
+|----  |
+ -----
