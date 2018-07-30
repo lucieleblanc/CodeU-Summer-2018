@@ -16,6 +16,8 @@
 </head>
 <body>
 
+<%String username = (String) request.getAttribute("username");%>
+
 <style>
   #feed {
     background-color: white;
@@ -23,7 +25,6 @@
     overflow-y: scroll
   }
 </style>
-
 
 <script>
     // scroll the feed div to the bottom
@@ -33,7 +34,7 @@
       };
     </script>
   </head>
-<body onload="feedChat()">
+<body onload="scrollFeed()">
 
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
@@ -53,64 +54,20 @@
     <% } %>  
       </nav>
 
-<center>
- <h2>
-<% if(request.getSession().getAttribute("user") != null){ %>
-      <h1> <%= request.getSession().getAttribute("user")%> 's Profile Page</h1></center>
-      <% } else{ %>
-      <h2>To see your profile,<a href="/login"> login.</a></h2>
-     <% } %>
-  </h2>
+<center><h1><%=username%>'s Profile Page</h1></center>
 <center>
 
+<%
+  session.setAttribute("username", username);
+%>
 <!--src fires a get request calling doGet() of the FileUploadServlet-->
 <img src="FileUploadServlet" alt="Upload a profile image" width="500" height="333">
-
-
-<body>
-  <center>
-      <form id = "form" method="POST" action="FileUploadServlet" enctype="multipart/form-data">
-        <table border="0">
-          <tr>
-            <td>Title: </td>
-            <td><input type="text" name="Title" size="50"/></td>
-          </tr>
-          <tr>
-            <td>Portrait Photo: </td>
-            <td><input type="file" name="photo" size="50"/></td>  
-          </tr>
-          <tr>
-            <td colspan="2">
-              <input type="submit" value="Save">
-            </td>
-          </tr>
-        </table>
-      </form>
-  </center>
-</body>
-
-
-<form action="/profile/" method="POST">
-      About <%= request.getSession().getAttribute("user")%>:
-      <%
-      // NOTE(fang): Not request.getSession().getAttribute(). 
-      String bio = (String)request.getAttribute("bio");
-      if (bio == null) {
-        bio = "";
-      }
-      %>
-      <textarea type="text" name="bio" value="<%= bio%>" placeholder="Tell us about yourself..." height="200" width="400"></textarea>
-      <button type="submit">Submit</button>
-</form></textarea>
-<div>
-
-</form>
 
 </div>
 <%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
 
 <div id="feed"> 
- <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
+ <h2><%=username%>'s Conversations:</h2>
 
     <%
     if(userConvos != null && !userConvos.isEmpty()) {
@@ -127,5 +84,3 @@
 
 </body>
 </html>
-           
-

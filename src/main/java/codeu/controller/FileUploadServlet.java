@@ -20,8 +20,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 
-/* This servlet will load upon startup and map it to the URL /FileUploadServlet. */
-@WebServlet("profile/FileUploadServlet")
+/* 
+ * This servlet will load upon startup and map it to the URL /FileUploadServlet. 
+ * Mapped to the profile and profile view jsp files. The profile jsp file
+ * allows you to access and edit your own profile. the profile view jsp file
+ * allows others to view, but not edit another user's profile.
+ */
+@WebServlet({"profile/FileUploadServlet", "profileView/FileUploadServlet"})
 /* Max file upload size is 16 MB. */
 @MultipartConfig(maxFileSize = 16177215)
 /* Servlet Class responsible for file uploads. */ 
@@ -48,8 +53,17 @@ public class FileUploadServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-      String mediaOwner = (String)request.getSession().getAttribute("user");
+      String uri = request.getRequestURI();
+      String mediaOwner = null;
+      if(uri.equals("/profile/FileUploadServlet")) {
+        mediaOwner = (String)request.getSession().getAttribute("user");
+      }
+      else if(uri.equals("/profileView/FileUploadServlet")) {
+      	mediaOwner = (String)request.getSession().getAttribute("username");
+      }
+
       Media picture = mediaStore.getProfilePicture(mediaOwner);
+
       if (picture!=null) {
         BufferedImage bufferedImage = picture.getContent();
         response.setContentType(picture.getContentType());
