@@ -16,11 +16,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Event" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%
-Conversation conversation = (Conversation) request.getAttribute("conversation");
-List<Message> messages = (List<Message>) request.getAttribute("messages");
-%>
+
+<% Conversation conversation = (Conversation) request.getAttribute("conversation"); %>
 
 <!DOCTYPE html>
 <html>
@@ -65,6 +64,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
   </nav>
 
+  <% List<Event> events = (List<Event>) request.getAttribute("events"); %>
   <div id="container">
 
     <h1><%= conversation.getTitle() %>
@@ -75,11 +75,13 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <div id="chat">
     <ul>
       <%
-        for (Message message : messages) {
-          String author = UserStore.getInstance()
-            .getUser(message.getAuthorId()).getName();
+        for (Event event : events) {
+          if(event.getEventType().toString() == "MESSAGE") {
+            String author = UserStore.getInstance()
+              .getUser(event.getAuthorIdForMessage()).getName();
       %>
-        <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
+            <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
+       <% } %>
       <% } %>
     </ul>
     </div>

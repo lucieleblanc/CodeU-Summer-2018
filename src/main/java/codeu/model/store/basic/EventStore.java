@@ -7,13 +7,11 @@ import codeu.model.data.Message;
 import codeu.model.data.Event;
 
 import codeu.model.store.persistence.PersistentStorageAgent;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
-import codeu.model.store.basic.UserStore;
 
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -113,5 +111,20 @@ public class EventStore{
   /**Add an event to the list of events. */
   public void addEvent(Event event){
     events.add(event);
+  }
+
+  /** Access the current set of Events within the given Conversation. */
+  public List<Event> getEventsInConversation(UUID conversationId) {
+
+    List<Event> eventsInConversation = new ArrayList<>();
+
+    for (Event event : events) {
+      if (event.getConversationIdForMessage() != null 
+          && event.getConversationIdForMessage().equals(conversationId)) {
+        eventsInConversation.add(event);
+      }
+    }
+
+    return eventsInConversation;
   }
 }

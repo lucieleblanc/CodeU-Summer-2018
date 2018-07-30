@@ -35,6 +35,7 @@ public class Event{
 	private final Instant messageCreationTime;
   private final UUID authorIdForMessage;
   private final String conversationTitleOfMessage;
+  private final UUID conversationIdForMessage;
   private final String messageContent;
   private final UUID messageId;
 
@@ -63,9 +64,11 @@ public class Event{
     authorIdForConversation = conversation.getOwnerId();
     conversationCreationTime = conversation.getCreationTime();
     conversationId = conversation.getId();
+
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
     messageContent = null;
     messageId = null;
 
@@ -114,10 +117,12 @@ public class Event{
     }
     if(error) {
       conversationTitleOfMessage = null;
+      conversationIdForMessage = null;
     }
     else {
       conversationTitleOfMessage = conversationStore.getConversationWithId(
         message.getConversationId()).getTitle();
+      conversationIdForMessage = message.getConversationId();
     }
 
     messageContent = message.getContent();
@@ -149,6 +154,7 @@ public class Event{
     messageCreationTime = message.getCreationTime();
     authorIdForMessage = message.getAuthorId();
     conversationTitleOfMessage = testTitle;
+    conversationIdForMessage = null;
     messageContent = message.getContent();
     messageId = message.getId();
 
@@ -176,12 +182,25 @@ public class Event{
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
     messageContent = null;
     messageId = null;
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
     userId = user.getId();
 	}
+
+  public UUID getConversationIdForMessage() {
+    return conversationIdForMessage;
+  }
+
+  public String getMessageContent() {
+    return messageContent;
+  }
+
+  public UUID getAuthorIdForMessage() {
+    return authorIdForMessage;
+  }
 
   public String getNameOfUser() {
     return nameOfUser;
@@ -265,3 +284,13 @@ public class Event{
     }
   }
 }
+
+//so first abstract chat servlet so that it uses the event layer as opposed to the chat layer to show chats doneth
+  //currently fixing unit test that got cukced while trying to abstract do
+  //and we have null ptr exceptions trying to access the conversations :/ fixed
+
+//make it so that event can hold media type
+
+//save media as an event in file upload servlet
+//chat.jsp will loop thorugh events and check if event is message or media and post right one
+//chat servlet just passes through event data
