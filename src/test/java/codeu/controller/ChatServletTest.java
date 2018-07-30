@@ -17,6 +17,7 @@ package codeu.controller;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -85,21 +86,22 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(fakeConversation);
 
-    List<Message> fakeMessageList = new ArrayList<>();
-    fakeMessageList.add(
-        new Message(
+    List<Event> fakeEventList = new ArrayList<>();
+    fakeEventList.add(
+            new Event (
+            new Message(
             UUID.randomUUID(),
             fakeConversationId,
             UUID.randomUUID(),
             "test message",
-            Instant.now()));
-    Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
-        .thenReturn(fakeMessageList);
+            Instant.now())));
+    Mockito.when(mockEventStore.getEventsInConversation(fakeConversationId))
+        .thenReturn(fakeEventList);
 
     chatServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
-    Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
+    Mockito.verify(mockRequest).setAttribute("events", fakeEventList);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
