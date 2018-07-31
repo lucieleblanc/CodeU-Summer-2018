@@ -10,8 +10,8 @@ import java.util.Locale;
 import java.time.ZoneId; 
 
 import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import java.awt.image.BufferedImage;
 
 /** 
  *  This class abstracts any object so it can be a User, Conversation, or Message. 
@@ -19,9 +19,9 @@ import codeu.model.store.basic.UserStore;
  */
 public class Event{
 
-	/* Denotes the type of event this is. Conversation, Message, or User. */
+	/* Denotes the type of event this is. Conversation, Message, User, or Media. */
 	public enum EventType{
-    CONVERSATION, MESSAGE, USER;
+    CONVERSATION, MESSAGE, USER, MEDIA;
   }
   private final EventType eventType;
 
@@ -43,6 +43,15 @@ public class Event{
   private final Instant userCreationTime;
   private final String nameOfUser;
   private final UUID userId;
+
+  /* All the fields needed from the media class. */
+  private final UUID mediaId;
+  private final UUID ownermediaId;
+  private final Instant mediaCreationTime;
+  private final String titleOfMedia;
+  private final BufferedImage contentOfMedia;
+  private final String contentTypeOfMedia;
+  private final UUID conversationIdForMedia;
 
   /* Needed to get the user given the ID from a conversation object. */
   private final UserStore userStore;
@@ -75,6 +84,14 @@ public class Event{
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    ownermediaId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
 
 	}
 
@@ -131,6 +148,14 @@ public class Event{
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    ownermediaId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
 	}
 
   /**
@@ -161,6 +186,14 @@ public class Event{
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    ownermediaId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
   }
 
   /**
@@ -188,7 +221,50 @@ public class Event{
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
     userId = user.getId();
-	}
+
+    mediaId = null;
+    ownermediaId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
+  }
+
+  /**
+   * Constructs an new event using a Media object.
+   *
+   * @param media an object of type media
+   */
+  public Event(Media media) {
+    eventType = EventType.MEDIA;
+
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
+
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
+    conversationId = null;
+
+    messageCreationTime = null;
+    authorIdForMessage = null;
+    conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
+    messageContent = null;
+    messageId = null;
+    userCreationTime = null;
+    nameOfUser = null;
+    userId = null;
+
+    mediaId = media.getId();
+    ownermediaId = media.getOwnerId();
+    mediaCreationTime = media.getCreationTime();
+    titleOfMedia = media.getTitle();
+    contentOfMedia = media.getContent();
+    contentTypeOfMedia = media.getContentType();
+    conversationIdForMedia = media.getConversationId();
+  }
 
   public UUID getConversationIdForMessage() {
     return conversationIdForMessage;
@@ -222,6 +298,9 @@ public class Event{
 	  if(eventType == EventType.USER) {
 	  	return toString(userCreationTime) + " PST: ";
 	  }
+    if(eventType == EventType.MEDIA) {
+      return "Fix this later. A user uploaded media though";
+    }
 	  else{
 	  	System.err.println("This object has no event type. This is impossible. I don't know how you even caused this error");
 	  	return null;
@@ -262,6 +341,9 @@ public class Event{
 		if(eventType == EventType.CONVERSATION) {
 			return conversationCreationTime.getEpochSecond();
 		}
+    if(eventType == EventType.MEDIA) {
+      return mediaCreationTime.getEpochSecond();
+    }
 		else {
 			System.err.println("This object has no event type");
 			return 0;
@@ -278,6 +360,9 @@ public class Event{
     if(eventType == EventType.CONVERSATION) {
       return conversationId;
     }
+    if(eventType == EventType.MEDIA) {
+      return mediaId;
+    }
     else {
       System.err.println("This object has no event type");
       return null;
@@ -285,12 +370,11 @@ public class Event{
   }
 }
 
-//so first abstract chat servlet so that it uses the event layer as opposed to the chat layer to show chats doneth
-  //currently fixing unit test that got cukced while trying to abstract do
-  //and we have null ptr exceptions trying to access the conversations :/ fixed
+//make it so that event can hold media type in a similar way to message (conversation that it comes from is important)
+  //make it actually save media as and event if uploaded from chat servlet
 
-//make it so that event can hold media type
-
-//save media as an event in file upload servlet
+//save media as an event in file upload servlet in a similar way that messages are saved as events
 //chat.jsp will loop thorugh events and check if event is message or media and post right one
 //chat servlet just passes through event data
+
+//for each correct image that we want, we call the file upload servlet and send it information as to which image we want

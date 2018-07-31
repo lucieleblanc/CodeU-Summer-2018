@@ -114,7 +114,7 @@ public class FileUploadServlet extends HttpServlet {
 	      BufferedImage content = ImageIO.read(inputStream);
 	      String contentType = filePart.getContentType();
 	      Media media = new Media(UUID.randomUUID(), user.getId(), 
-	        mediaTitle, Instant.now(), content, contentType);
+	        mediaTitle, Instant.now(), content, contentType, null);
 	      if(mediaStore.getProfilePicture(user.getName())!=null) {
 	        mediaStore.getProfilePicture(user.getName()).setIsProfilePicture(false);
 	      }
