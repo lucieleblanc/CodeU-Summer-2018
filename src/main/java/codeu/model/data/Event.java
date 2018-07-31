@@ -370,11 +370,10 @@ public class Event{
   }
 }
 
-//make it so that event can hold media type in a similar way to message (conversation that it comes from is important)
-  //make it actually save media as and event if uploaded from chat servlet
 
-//save media as an event in file upload servlet in a similar way that messages are saved as events
-//chat.jsp will loop thorugh events and check if event is message or media and post right one
+//also try and serve images in doget
+//chat.jsp will loop thorugh events and check if event is message or media and post right one,
+   //allow jsp file to be able to get media events
 //chat servlet just passes through event data
 
 //for each correct image that we want, we call the file upload servlet and send it information as to which image we want
