@@ -183,7 +183,7 @@ public class PersistentDataStore {
         InputStream in = new ByteArrayInputStream(contentBytes);
         BufferedImage content = ImageIO.read(in);
         String contentType = (String) entity.getProperty("contentType");
-        UUID conversationId = (UUID) entity.getProperty("conversationId");
+        UUID conversationId = UUID.fromString((String) entity.getProperty("conversationId"));
         Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content, contentType, conversationId);
         singleMedia.setIsProfilePicture(Boolean.valueOf((String) entity.getProperty("isProfilePicture")));
         media.add(singleMedia);
@@ -249,7 +249,7 @@ public class PersistentDataStore {
 
     mediaEntity.setProperty("contentType", singleMedia.getContentType());
     mediaEntity.setProperty("isProfilePicture", singleMedia.getIsProfilePicture().toString());
-    mediaEntity.setProperty("conversationId", singleMedia.getConversationId());
+    mediaEntity.setProperty("conversationId", singleMedia.getConversationId().toString());
     
     datastore.put(mediaEntity);
 

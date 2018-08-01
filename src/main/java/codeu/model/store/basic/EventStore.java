@@ -132,6 +132,10 @@ public class EventStore{
           && event.getConversationIdForMessage().equals(conversationId)) {
         eventsInConversation.add(event);
       }
+      if (event.getConversationIdForMedia() != null 
+          && event.getConversationIdForMedia().equals(conversationId)) {
+        eventsInConversation.add(event);
+      }
     }
 
     return eventsInConversation;

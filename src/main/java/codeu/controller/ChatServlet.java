@@ -111,7 +111,6 @@ public class ChatServlet extends HttpServlet {
 
     UUID conversationId = conversation.getId();
 
-    // List<Message> messages = messageStore.getMessagesInConversation(conversationId);
     List<Event> events = eventStore.getEventsInConversation(conversationId);
 
     request.setAttribute("conversation", conversation);

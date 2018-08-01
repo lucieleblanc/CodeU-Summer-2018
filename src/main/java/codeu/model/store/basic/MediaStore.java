@@ -134,7 +134,7 @@ public class MediaStore {
     }
   }
 
-  public Media getProfilePicture(UUID id) {jnkj
+  public Media getProfilePicture(UUID id) {
     if(mediaIdMap.containsKey(id)) {
       return mediaIdMap.get(id);
     }

@@ -1,9 +1,11 @@
 
 package codeu.controller;
 
+import codeu.model.data.Conversation;
 import codeu.model.data.Event;
 import codeu.model.data.Media;
 import codeu.model.data.User;
+import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MediaStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
@@ -41,6 +43,8 @@ public class FileUploadServlet extends HttpServlet {
     private UserStore userStore;
     /* Store class that gives access to Events. */
     private EventStore eventStore;
+    /* Store class that gives access to Conversations. */
+    private ConversationStore conversationStore;
 
 
     /**
@@ -53,6 +57,7 @@ public class FileUploadServlet extends HttpServlet {
       setMediaStore(MediaStore.getInstance());
       setUserStore(UserStore.getInstance());
       setEventStore(EventStore.getInstance());
+      setConversationStore(ConversationStore.getInstance());
     }
 
     @Override
@@ -123,8 +128,14 @@ public class FileUploadServlet extends HttpServlet {
 	    if(inputStream!=null) {
 	      BufferedImage content = ImageIO.read(inputStream);
 	      String contentType = filePart.getContentType();
+	      UUID conversationId = null;
+	      /* If this is uploaded from a conversation, get the conversation id. */
+	      if(uri.equals("/chat/FileUploadServlet")) {
+	      	Conversation conversation = conversationStore.getConversationWithTitle(chatName);
+	      	conversationId = conversation.getId();
+	      }
 	      Media media = new Media(UUID.randomUUID(), user.getId(), 
-	        mediaTitle, Instant.now(), content, contentType, null);
+	        mediaTitle, Instant.now(), content, contentType, conversationId);
 	      if(mediaStore.getProfilePicture(user.getName())!=null) {
 	        mediaStore.getProfilePicture(user.getName()).setIsProfilePicture(false);
 	      }
@@ -169,5 +180,13 @@ public class FileUploadServlet extends HttpServlet {
 	 */
 	  void setEventStore(EventStore eventStore) {
 	    this.eventStore = eventStore;
+	  }
+
+	/**
+	 * Sets the ConversationStore used by this servlet. This function provides a common setup method for
+	 * use by the test framework or the servlet's init() function.
+	 */
+	  void setConversationStore(ConversationStore conversationStore) {
+	    this.conversationStore = conversationStore;
 	  } 
 }

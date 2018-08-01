@@ -266,6 +266,14 @@ public class Event{
     conversationIdForMedia = media.getConversationId();
   }
 
+  public UUID getMediaId() {
+    return mediaId;
+  }
+
+  public UUID getConversationIdForMedia() {
+    return conversationIdForMedia;
+  }
+
   public UUID getConversationIdForMessage() {
     return conversationIdForMessage;
   }
@@ -369,11 +377,3 @@ public class Event{
     }
   }
 }
-
-
-//also try and serve images in doget
-//chat.jsp will loop thorugh events and check if event is message or media and post right one,
-   //allow jsp file to be able to get media events
-//chat servlet just passes through event data
-
-//for each correct image that we want, we call the file upload servlet and send it information as to which image we want
