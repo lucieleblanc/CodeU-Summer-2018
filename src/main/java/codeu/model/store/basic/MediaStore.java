@@ -134,6 +134,15 @@ public class MediaStore {
     }
   }
 
+  public Media getProfilePicture(UUID id) {jnkj
+    if(mediaIdMap.containsKey(id)) {
+      return mediaIdMap.get(id);
+    }
+    else {
+      return null;
+    }
+  }
+
   public void setProfilePicture(String user, Media singleMedia) {
     profilePictureMap.put(user, singleMedia);
     singleMedia.setIsProfilePicture(true);

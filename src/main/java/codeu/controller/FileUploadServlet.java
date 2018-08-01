@@ -61,14 +61,19 @@ public class FileUploadServlet extends HttpServlet {
 
       String uri = request.getRequestURI();
       String mediaOwner = null;
+      Media picture = null;
       if(uri.equals("/profile/FileUploadServlet")) {
         mediaOwner = (String)request.getSession().getAttribute("user");
+        picture = mediaStore.getProfilePicture(mediaOwner);
       }
       else if(uri.equals("/profileView/FileUploadServlet")) {
       	mediaOwner = (String)request.getSession().getAttribute("username");
+      	picture = mediaStore.getProfilePicture(mediaOwner);
       }
-
-      Media picture = mediaStore.getProfilePicture(mediaOwner);
+      else if(uri.equals("/chat/FileUploadServlet")) {
+      	UUID mediaId = (UUID)request.getSession().getAttribute("mediaId");
+        picture = mediaStore.getProfilePicture(mediaId);
+      }
 
       if (picture!=null) {
         BufferedImage bufferedImage = picture.getContent();
