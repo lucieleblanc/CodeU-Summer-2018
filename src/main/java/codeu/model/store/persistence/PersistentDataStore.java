@@ -249,7 +249,13 @@ public class PersistentDataStore {
 
     mediaEntity.setProperty("contentType", singleMedia.getContentType());
     mediaEntity.setProperty("isProfilePicture", singleMedia.getIsProfilePicture().toString());
-    mediaEntity.setProperty("conversationId", singleMedia.getConversationId().toString());
+    if(singleMedia.getConversationId()!=null) {
+      mediaEntity.setProperty("conversationId", singleMedia.getConversationId().toString());
+    }
+    else 
+    {
+      mediaEntity.setProperty("conversationId",  null);
+    }
     
     datastore.put(mediaEntity);
 

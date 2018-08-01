@@ -82,9 +82,11 @@
       %>
             <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
        <% } else if(event.getEventType().toString() == "MEDIA") {
-            session.setAttribute("mediaId", event.getMediaId());
+              session.setAttribute("mediaId", event.getMediaId());
        %>
-            <li><img src="FileUploadServlet" alt="Upload a profile image" width="450" height="300"></li>
+              <div style="float: left;">
+                <li><img src="FileUploadServlet" alt="Upload a profile image" width="450" height="300"></li>
+              </div>
        <% } %>
       <% } %>
     </ul>
