@@ -17,17 +17,24 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.store.persistence.PersistentDataStoreException;
+import codeu.model.data.Media;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Text;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -67,7 +74,8 @@ public class PersistentDataStore {
         String userName = (String) entity.getProperty("username");
         String passwordHash = (String) entity.getProperty("password_hash");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        User user = new User(uuid, userName, passwordHash, creationTime);
+        String bio = (String) entity.getProperty("bio");
+        User user = new User(uuid, userName, passwordHash, creationTime, bio);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -149,6 +157,47 @@ public class PersistentDataStore {
     return messages;
   }
 
+  /**
+   * Loads all Media objects from the Datastore service and returns them in a List, sorted in
+   * ascending order by creation time.
+   *
+   * @throws PersistentDataStoreException if an error was detected during the load from the
+   *     Datastore service
+   */
+  public List<Media> loadMedia() throws PersistentDataStoreException {
+
+    List<Media> media = new ArrayList<>();
+
+    // Retrieve all conversations from the datastore.
+    Query query = new Query("chat-media").addSort("creation_time", SortDirection.ASCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
+        UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
+        String title = (String) entity.getProperty("title");
+        Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        String contentString = ((Text) entity.getProperty("content")).getValue();
+        byte[] contentBytes = new BigInteger(contentString, 16).toByteArray();
+        InputStream in = new ByteArrayInputStream(contentBytes);
+        BufferedImage content = ImageIO.read(in);
+        String contentType = (String) entity.getProperty("contentType");
+        UUID conversationId = UUID.fromString((String) entity.getProperty("conversationId"));
+        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content, contentType, conversationId);
+        singleMedia.setIsProfilePicture(Boolean.valueOf((String) entity.getProperty("isProfilePicture")));
+        media.add(singleMedia);
+      } catch (Exception e) {
+        // In a production environment, errors should be very rare. Errors which may
+        // occur include network errors, Datastore service errors, authorization errors,
+        // database entity definition mismatches, or service mismatches.
+        throw new PersistentDataStoreException(e);
+      }
+    }
+
+    return media;
+  }
+
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
     Entity userEntity = new Entity("chat-users", user.getId().toString());
@@ -156,6 +205,9 @@ public class PersistentDataStore {
     userEntity.setProperty("username", user.getName());
     userEntity.setProperty("password_hash", user.getPasswordHash());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
+    System.out.println("PersistentDataStore is setting bio " +
+      user.getBio() +" for user " + user.getId().toString());
+    userEntity.setProperty("bio", user.getBio());
     datastore.put(userEntity);
   }
 
@@ -179,5 +231,44 @@ public class PersistentDataStore {
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     datastore.put(conversationEntity);
   }
-}
 
+  /** Write a Media object to the Datastore service. */
+  public void writeThrough(Media singleMedia) throws java.io.IOException {
+    Entity mediaEntity = new Entity("chat-media", singleMedia.getId().toString());
+    mediaEntity.setProperty("uuid", singleMedia.getId().toString());
+    mediaEntity.setProperty("owner_uuid", singleMedia.getOwnerId().toString());
+    mediaEntity.setProperty("title", singleMedia.getTitle());
+    mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
+    
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ImageIO.write(singleMedia.getContent(), "jpg", baos);
+    byte[] contentBytes = baos.toByteArray();
+    String contentString = bytesToHex(contentBytes);
+    Text contentText = new Text(contentString);
+    mediaEntity.setProperty("content", contentText);
+
+    mediaEntity.setProperty("contentType", singleMedia.getContentType());
+    mediaEntity.setProperty("isProfilePicture", singleMedia.getIsProfilePicture().toString());
+    if(singleMedia.getConversationId()!=null) {
+      mediaEntity.setProperty("conversationId", singleMedia.getConversationId().toString());
+    }
+    else 
+    {
+      mediaEntity.setProperty("conversationId",  null);
+    }
+    
+    datastore.put(mediaEntity);
+
+  }
+
+  private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+  public static String bytesToHex(byte[] bytes) {
+    char[] hexChars = new char[bytes.length * 2];
+    for ( int j = 0; j < bytes.length; j++ ) {
+        int v = bytes[j] & 0xFF;
+        hexChars[j * 2] = hexArray[v >>> 4];
+        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+    }
+    return new String(hexChars);
+  }
+}

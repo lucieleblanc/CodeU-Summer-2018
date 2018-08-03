@@ -1,10 +1,9 @@
 
 <%@ page import="java.util.List" %>
-<%@ page import="codeu.model.data.Conversation" %>
-<%@ page import="codeu.model.data.Message" %>
-<%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.Event" %>
+
 <%
-List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
+List<Event> events = (List<Event>) request.getAttribute("events");
 %>
 
 
@@ -24,19 +23,21 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
   }
 </style>
 
-
-<script>
+    <script>
     // scroll the feed div to the bottom
       function scrollFeed() {
         var feedDiv = document.getElementById('feed');
         feedDiv.scrollTop = feedDiv.scrollHeight;
       };
     </script>
-  </head>
-<body onload="feedChat()">
+</head>
+<body onload="scrollFeed()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
+    
+  <div class="navItems hidden">
     <a href="/conversations">Conversations</a>
     <% if(request.getSession().getAttribute("user") != null){ %>
       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
@@ -45,28 +46,43 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
     <% } %>
     <a href="/about.jsp">About</a>
     <a href="/activity.jsp">Activity Feed</a>
+     <% if(request.getSession().getAttribute("user") != null){ %>
+    <% String user = (String)request.getSession().getAttribute("user");%>
+    <a href="/profile/<%=user%>" >My Profile</a>  
+    <%} else{%>
+      <a href="/login"> My Profile</a>
+    <% } %>
+  </div>
+
   </nav>
 
 <div id="feed">
   <ul>
-    <%
-      for (Conversation conversation : conversations) {
-        String title = conversation.getTitle();
-    %>
-    <li><strong><%= title %></strong></li>
-    <%
-      }
-    %>
+    <% for(Event event: events){ %>
+      <% if(event.getEventType().toString() == "USER") { %>
+        <li><%=event.toString()%> 
+            <a href="/profileView/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
+            joined
+        </li>
+      <% } else { %>
+        <li><%= event.toString() %>
+        <% if(event.getEventType().toString() == "CONVERSATION") { %>
+        <a href="/chat/<%=event.getTitleOfConversation()%>">
+            <%= event.getTitleOfConversation()%></li>
+        </a>
+        <% } %> 
+      <% } %>
+    <% } %>
   </ul>
 </div>
 
   <div id="container">
 
     <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+        <h2 class="error"><%= request.getAttribute("error") %></h2>
     <% } %>
-    
-    <h1>This is the activity feed page, coming soon!</h1>
+
+    <h1>Look at all this activity!</h1>
 
   </div>
 </body>

@@ -16,6 +16,8 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
@@ -41,6 +43,17 @@ public class Conversation {
     this.creation = creation;
     this.title = title;
   }
+
+  /*public boolean equals(List, List) {
+    List x = new ArrayList(); 
+    List y = new ArrayList();
+    if(x == y){
+      return true;
+    }
+    else{
+      return false; 
+    }
+  }*/
 
   /** Returns the ID of this Conversation. */
   public UUID getId() {

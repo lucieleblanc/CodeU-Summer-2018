@@ -23,6 +23,7 @@ public class User {
   private final String name;
   private final String passwordHash;
   private final Instant creation;
+  private String bio;
 
   /**
    * Constructs a new User.
@@ -31,12 +32,15 @@ public class User {
    * @param name the username of this User
    * @param passwordHash the password hash of this User
    * @param creation the creation time of this User
-   */
-  public User(UUID id, String name, String passwordHash, Instant creation) {
+   * @param bio the bio of the user (?)
+**/
+  public User(UUID id, String name, String passwordHash, Instant creation, String bio) {
     this.id = id;
     this.name = name;
     this.passwordHash = passwordHash;
     this.creation = creation;
+    this.bio = bio;
+
   }
 
   /** Returns the ID of this User. */
@@ -48,7 +52,7 @@ public class User {
   public String getName() {
     return name;
   }
-  
+
   /** Returns the password hash of this User. */
   public String getPasswordHash() {
     return passwordHash;
@@ -58,4 +62,21 @@ public class User {
   public Instant getCreationTime() {
     return creation;
   }
+
+  public void setBio(String bio){
+    this.bio = bio;
+  }
+
+  public String getBio(){
+    return bio;
+  }
+
+/**@Override
+public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException {
+        String userBio = request.getParameter("bio");
+        System.out.println(userBio);
+        response.sendRedirect("/profile.jsp");
+    }**/
+  //now we have a new property (?) of the user class (bio)
 }

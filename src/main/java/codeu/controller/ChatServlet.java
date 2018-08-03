@@ -15,9 +15,11 @@
 package codeu.controller;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.Event;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
+import codeu.model.store.basic.EventStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
@@ -43,6 +45,9 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Events. */
+  private EventStore eventStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -50,6 +55,7 @@ public class ChatServlet extends HttpServlet {
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setEventStore(EventStore.getInstance());
   }
 
   /**
@@ -77,6 +83,14 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setEventStore(EventStore eventStore) {
+    this.eventStore = eventStore;
+  }
+
+  /**
    * This function fires when a user navigates to the chat page. It gets the conversation title from
    * the URL, finds the corresponding Conversation, and fetches the messages in that Conversation.
    * It then forwards to chat.jsp for rendering.
@@ -97,10 +111,11 @@ public class ChatServlet extends HttpServlet {
 
     UUID conversationId = conversation.getId();
 
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<Event> events = eventStore.getEventsInConversation(conversationId);
 
     request.setAttribute("conversation", conversation);
-    request.setAttribute("messages", messages);
+    request.setAttribute("events", events);
+    request.setAttribute("chatName", conversationTitle);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -152,6 +167,7 @@ public class ChatServlet extends HttpServlet {
             Instant.now());
 
     messageStore.addMessage(message);
+    eventStore.addEvent(new Event(message));
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);

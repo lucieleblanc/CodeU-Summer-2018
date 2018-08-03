@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class ConversationServletTest {
   private RequestDispatcher mockRequestDispatcher;
   private ConversationStore mockConversationStore;
   private UserStore mockUserStore;
+  private EventStore mockEventStore;
 
   @Before
   public void setup() {
@@ -62,7 +64,11 @@ public class ConversationServletTest {
 
     mockUserStore = Mockito.mock(UserStore.class);
     conversationServlet.setUserStore(mockUserStore);
+
+    mockEventStore = Mockito.mock(EventStore.class);
+    conversationServlet.setEventStore(mockEventStore);
   }
+
 
   @Test
   public void testDoGet() throws IOException, ServletException {
@@ -110,7 +116,8 @@ public class ConversationServletTest {
             UUID.randomUUID(),
             "test_username",
             "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
+            Instant.now(),
+            "test_bio");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     conversationServlet.doPost(mockRequest, mockResponse);
@@ -131,7 +138,8 @@ public class ConversationServletTest {
             UUID.randomUUID(),
             "test_username",
             "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
+            Instant.now(),
+            "test_bio");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(true);
@@ -153,7 +161,8 @@ public class ConversationServletTest {
             UUID.randomUUID(),
             "test_username",
             "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
+            Instant.now(),
+            "test_bio");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(false);
