@@ -25,6 +25,8 @@ public class Media {
    * @param title the title of this Media
    * @param creation the creation time of this Media
    * @param content the content of this media
+   * @param contentType the content type of this media
+   * @param conversationId the conversation id of this media
    */
   public Media(UUID id, UUID owner, String title, Instant creation, 
     BufferedImage content, String contentType, UUID conversationId) {

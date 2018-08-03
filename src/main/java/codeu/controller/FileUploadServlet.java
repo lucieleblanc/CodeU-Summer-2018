@@ -92,101 +92,102 @@ public class FileUploadServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+      
+      String uri = request.getRequestURI();
 
-      	String uri = request.getRequestURI();
-	    
-	    String mediaTitle = null;
-	    if(!uri.equals("/chat/FileUploadServlet")) {
-	      /* Title given by user in profile.jsp. */
-          mediaTitle = (String)request.getParameter("Title"); 
-        }
+	  String mediaTitle = null;
+	  Boolean notFromChatJSP = !uri.equals("/chat/FileUploadServlet");
+	  if(notFromChatJSP) {
+        /* Title given by user in profile.jsp. */
+		mediaTitle = (String)request.getParameter("Title"); 
+	  }
 
-        /* Uploader. */
-        String mediaOwner = (String)request.getSession().getAttribute("user");
-        /* Input stream of the upload file. */
-        InputStream inputStream = null;
+      /* Uploader. */
+      String mediaOwner = (String)request.getSession().getAttribute("user");
+      /* Input stream of the upload file. */
+      InputStream inputStream = null;
 
-		/* Get the file chosen by the user. */
-		Part filePart = request.getPart("photo");
+	  /* Get the file chosen by the user. */
+	  Part filePart = request.getPart("photo");
 
-		/* Get the name of the chat this came from. */
-		String chatName = null;
-		if(uri.equals("/chat/FileUploadServlet")) {
-		  chatName = (String)request.getSession().getAttribute("chatName");
-		}
+	  /* Get the name of the chat this came from. */
+	  String chatName = null;
+	  if(uri.equals("/chat/FileUploadServlet")) {
+	    chatName = (String)request.getSession().getAttribute("chatName");
+	  }
 		
-		/* Get the InputStream to store the file. */
-	    if(filePart != null) {
-	      System.out.println(filePart.getName());
-	      System.out.println(filePart.getSize());
-	      System.out.println(filePart.getContentType());
-	      //Input stream of upload file. 
-	      inputStream = filePart.getInputStream();
-	    }
+      /* Get the InputStream to store the file. */
+	  if(filePart != null) {
+	    System.out.println(filePart.getName());
+	 	System.out.println(filePart.getSize());
+	 	System.out.println(filePart.getContentType());
+	    //Input stream of upload file. 
+	    inputStream = filePart.getInputStream();
+	  }
 	    
-	    User user = userStore.getUser(mediaOwner);
-	    if(inputStream!=null) {
-	      BufferedImage content = ImageIO.read(inputStream);
-	      String contentType = filePart.getContentType();
-	      UUID conversationId = null;
-	      /* If this is uploaded from a conversation, get the conversation id. */
-	      if(uri.equals("/chat/FileUploadServlet")) {
-	      	Conversation conversation = conversationStore.getConversationWithTitle(chatName);
-	      	conversationId = conversation.getId();
-	      }
-	      Media media = new Media(UUID.randomUUID(), user.getId(), 
-	        mediaTitle, Instant.now(), content, contentType, conversationId);
-	      if(mediaStore.getProfilePicture(user.getName())!=null) {
-	        mediaStore.getProfilePicture(user.getName()).setIsProfilePicture(false);
-	      }
-	      if(uri.equals("/profile/FileUploadServlet")) {
-	      	mediaStore.setProfilePicture(user.getName(), media);
-	      }
-	      if(uri.equals("/chat/FileUploadServlet")) {
-	        eventStore.addEvent(new Event(media));
-	       }
-	      mediaStore.addMedia(media);
+	  User user = userStore.getUser(mediaOwner);
+	  if(inputStream!=null) {
+	    BufferedImage content = ImageIO.read(inputStream);
+	    String contentType = filePart.getContentType();
+	    UUID conversationId = null;
+	    /* If this is uploaded from a conversation, get the conversation id. */
+	    if(uri.equals("/chat/FileUploadServlet")) {
+	      Conversation conversation = conversationStore.getConversationWithTitle(chatName);
+	      conversationId = conversation.getId();
 	    }
+	    Media media = new Media(UUID.randomUUID(), user.getId(), 
+	    mediaTitle, Instant.now(), content, contentType, conversationId);
+	    if(mediaStore.getProfilePicture(user.getName())!=null) {
+	      mediaStore.getProfilePicture(user.getName()).setIsProfilePicture(false);
+	    }
+	    if(uri.equals("/profile/FileUploadServlet")) {
+	      mediaStore.setProfilePicture(user.getName(), media);
+	    }
+	    if(uri.equals("/chat/FileUploadServlet")) {
+	      eventStore.addEvent(new Event(media));
+	    }
+	      mediaStore.addMedia(media);
+	  }
         
         /* Redirect to profile page if that's where you posted from. */
-        if(uri.equals("/profile/FileUploadServlet")) {
-          response.sendRedirect("/profile/"+user.getName()); 
-        }
-        /* Redirect to the chat you posted from. */
-        if(uri.equals("/chat/FileUploadServlet")) {
-          response.sendRedirect("/chat/"+chatName); 
-        }
+      if(uri.equals("/profile/FileUploadServlet")) {
+        response.sendRedirect("/profile/"+user.getName()); 
+      }
+      /* Redirect to the chat you posted from. */
+      if(uri.equals("/chat/FileUploadServlet")) {
+        response.sendRedirect("/chat/"+chatName); 
+      }
+    }
+
+   /**
+	* Sets the MediaStore used by this servlet. This function provides a common setup method for
+	* use by the test framework or the servlet's init() function.
+	*/
+	void setMediaStore(MediaStore mediaStore) {
+	  this.mediaStore = mediaStore;
+	} 
+
+   /**
+	* Sets the UserStore used by this servlet. This function provides a common setup method for
+	* use by the test framework or the servlet's init() function.
+	*/
+	void setUserStore(UserStore userStore) {
+	  this.userStore = userStore;
 	}
 
-	/**
-	 * Sets the MediaStore used by this servlet. This function provides a common setup method for
-	 * use by the test framework or the servlet's init() function.
-	 */
-	  void setMediaStore(MediaStore mediaStore) {
-	    this.mediaStore = mediaStore;
-	  } 
-
-	/**
-	 * Sets the UserStore used by this servlet. This function provides a common setup method for
-	 * use by the test framework or the servlet's init() function.
-	 */
-	  void setUserStore(UserStore userStore) {
-	    this.userStore = userStore;
-	  }
-
-	/**
-	 * Sets the EventStore used by this servlet. This function provides a common setup method for
-	 * use by the test framework or the servlet's init() function.
-	 */
-	  void setEventStore(EventStore eventStore) {
-	    this.eventStore = eventStore;
-	  }
+   /**
+	* Sets the EventStore used by this servlet. This function provides a common setup method for
+	* use by the test framework or the servlet's init() function.
+	*/
+	void setEventStore(EventStore eventStore) {
+	  this.eventStore = eventStore;
+	}
 
 	/**
 	 * Sets the ConversationStore used by this servlet. This function provides a common setup method for
 	 * use by the test framework or the servlet's init() function.
 	 */
-	  void setConversationStore(ConversationStore conversationStore) {
-	    this.conversationStore = conversationStore;
-	  } 
+	void setConversationStore(ConversationStore conversationStore) {
+	  this.conversationStore = conversationStore;
+	} 
 }

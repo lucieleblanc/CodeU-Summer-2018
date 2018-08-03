@@ -46,7 +46,7 @@ public class Event{
 
   /* All the fields needed from the media class. */
   private final UUID mediaId;
-  private final UUID ownermediaId;
+  private final UUID mediaOwnerId;
   private final Instant mediaCreationTime;
   private final String titleOfMedia;
   private final BufferedImage contentOfMedia;
@@ -86,7 +86,7 @@ public class Event{
     userId = null;
 
     mediaId = null;
-    ownermediaId = null;
+    mediaOwnerId = null;
     mediaCreationTime = null;
     titleOfMedia = null;
     contentOfMedia = null;
@@ -150,7 +150,7 @@ public class Event{
     userId = null;
 
     mediaId = null;
-    ownermediaId = null;
+    mediaOwnerId = null;
     mediaCreationTime = null;
     titleOfMedia = null;
     contentOfMedia = null;
@@ -188,7 +188,7 @@ public class Event{
     userId = null;
 
     mediaId = null;
-    ownermediaId = null;
+    mediaOwnerId = null;
     mediaCreationTime = null;
     titleOfMedia = null;
     contentOfMedia = null;
@@ -223,7 +223,7 @@ public class Event{
     userId = user.getId();
 
     mediaId = null;
-    ownermediaId = null;
+    mediaOwnerId = null;
     mediaCreationTime = null;
     titleOfMedia = null;
     contentOfMedia = null;
@@ -258,7 +258,7 @@ public class Event{
     userId = null;
 
     mediaId = media.getId();
-    ownermediaId = media.getOwnerId();
+    mediaOwnerId = media.getOwnerId();
     mediaCreationTime = media.getCreationTime();
     titleOfMedia = media.getTitle();
     contentOfMedia = media.getContent();
