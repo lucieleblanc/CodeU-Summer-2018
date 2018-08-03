@@ -34,7 +34,10 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 <body onload="scrollFeed()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
+    
+  <div class="navItems hidden">
     <a href="/conversations">Conversations</a>
     <% if(request.getSession().getAttribute("user") != null){ %>
       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
@@ -49,6 +52,8 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <%} else{%>
       <a href="/login"> My Profile</a>
     <% } %>
+  </div>
+
   </nav>
 
 <div id="feed">
@@ -74,12 +79,11 @@ List<Event> events = (List<Event>) request.getAttribute("events");
   <div id="container">
 
     <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+        <h2 class="error"><%= request.getAttribute("error") %></h2>
     <% } %>
-    
+
     <h1>Look at all this activity!</h1>
 
   </div>
 </body>
 </html>
-

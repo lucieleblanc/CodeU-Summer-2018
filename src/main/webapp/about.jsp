@@ -22,27 +22,27 @@
 <body>
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
-    <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-    <a href="/activity.jsp">Activity Feed</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-       <% String user = (String)request.getSession().getAttribute("user");%>
-       <a href="/profile/<%=user%>" >My Profile</a>  
-    <%} else{%>
-       <a href="/login"> My Profile</a>
-    <% } %> 
+    <div class="navItems hidden">
+      <a href="/conversations">Conversations</a>
+      <% if(request.getSession().getAttribute("user") != null){ %>
+        <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+      <% } else{ %>
+        <a href="/login">Login</a>
+      <% } %>
+      <a href="/about.jsp">About</a>
+      <a href="/activity.jsp">Activity Feed</a>
+      <% if(request.getSession().getAttribute("user") != null){ %>
+         <% String user = (String)request.getSession().getAttribute("user");%>
+         <a href="/profile/<%=user%>" >My Profile</a>
+      <%} else{%>
+         <a href="/login"> My Profile</a>
+      <% } %>
+    </div>
   </nav>
 
   <div id="container">
-    <div
-      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
-
       <h1>About the CodeU Chat App</h1>
       <p>
         This is an example chat application designed to be a starting point
@@ -71,7 +71,6 @@
         This page should also be used to describe the features and improvements
         you've added.
       </p>
-    </div>
   </div>
 </body>
 </html>

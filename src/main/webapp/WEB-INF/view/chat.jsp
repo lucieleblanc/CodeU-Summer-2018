@@ -46,7 +46,10 @@
 <body onload="scrollChat()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
+
+   <div class="navItems hidden">
     <a href="/conversations">Conversations</a>
       <% if (request.getSession().getAttribute("user") != null) { %>
     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
@@ -61,6 +64,7 @@
     <%} else{%>
       <a href="/login"> My Profile</a>
     <% } %>
+  </div>
 
   </nav>
 

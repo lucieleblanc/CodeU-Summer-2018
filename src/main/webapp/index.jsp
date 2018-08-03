@@ -19,24 +19,27 @@
   <title>CodeU Chat App</title>
   <link rel="stylesheet" href="/css/main.css">
 </head>
-<body>
+<body onresize="checkScreenSize()">
 
   <nav>
+    <img src="menu-button.png" id="navItemToggle" onClick="toggleMenu()" />
     <a id="navTitle" href="/">CodeU Chat App</a>
-    <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-    <a href="/activity.jsp">Activity Feed</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-       <% String user = (String)request.getSession().getAttribute("user");%>
-       <a href="/profile/<%=user%>" >My Profile</a>  
-    <%} else{%>
-       <a href="/login">My Profile</a>
-    <% } %> 
+    <div class="navItems hidden">
+        <a href="/conversations">Conversations</a>
+        <% if(request.getSession().getAttribute("user") != null){ %>
+          <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+        <% } else{ %>
+          <a href="/login">Login</a>
+        <% } %>
+        <a href="/about.jsp">About</a>
+        <a href="/activity.jsp">Activity Feed</a>
+        <% if(request.getSession().getAttribute("user") != null){ %>
+           <% String user = (String)request.getSession().getAttribute("user");%>
+           <a href="/profile/<%=user%>" >My Profile</a>
+        <%} else{%>
+           <a href="/login">My Profile</a>
+        <% } %>
+    </div>
   </nav>
 
   <div id="container">
@@ -62,5 +65,6 @@
       </ul>
     </div>
   </div>
+  <script src="/css/menu.js"></script>
 </body>
 </html>
