@@ -4,16 +4,15 @@ package codeu.model.store.basic;
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.data.Message;
+import codeu.model.data.Media;
 import codeu.model.data.Event;
 
 import codeu.model.store.persistence.PersistentStorageAgent;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
-import codeu.model.store.basic.UserStore;
 
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -45,8 +44,8 @@ public class EventStore{
   }
 
   /**
-   * The PersistentStorageAgent responsible for loading Conversations, Messages, and 
-   * Users from and saving Conversations, Messages, and Users to Datastore.
+   * The PersistentStorageAgent responsible for loading Conversations, Messages, Media and 
+   * Users from and saving Conversations, Messages, Media, and Users to the Datastore.
    */
   private PersistentStorageAgent persistentStorageAgent;
 
@@ -59,6 +58,9 @@ public class EventStore{
   /** The in-memory list of Users. */
   private List<User> users;
 
+  /** The in-memory list of Media. */
+  private List<Media> media;
+
   /** A list of events (users, messages, and convesations). */
   private List<Event> events;
 
@@ -69,6 +71,7 @@ public class EventStore{
     messages = new ArrayList<>();
     users = new ArrayList<>();
     events = new ArrayList<>();
+    media = new ArrayList<>();
   }
 
   /** Access the current set of events known to the application in chronological order. */
@@ -85,10 +88,11 @@ public class EventStore{
   }
   
   /** Set converations, messages, and users. */
-  public void setEvents(List<User> users, List <Conversation> conversations, List <Message> messages){
+  public void setEvents(List<User> users, List <Conversation> conversations, List <Message> messages, List <Media> media){
     this.conversations = conversations;
     this.messages = messages;
     this.users = users;
+    this.media = media;
     convertToEvents();
   }
 
@@ -108,10 +112,32 @@ public class EventStore{
     for(User user: users){
     	events.add(new Event(user));
     }
+    for(Media singleMedia: media){
+      events.add(new Event(singleMedia));
+    }
   }
 
   /**Add an event to the list of events. */
   public void addEvent(Event event){
     events.add(event);
+  }
+
+  /** Access the current set of Events within the given Conversation. */
+  public List<Event> getEventsInConversation(UUID conversationId) {
+
+    List<Event> eventsInConversation = new ArrayList<>();
+
+    for (Event event : events) {
+      if (event.getConversationIdForMessage() != null 
+          && event.getConversationIdForMessage().equals(conversationId)) {
+        eventsInConversation.add(event);
+      }
+      if (event.getConversationIdForMedia() != null 
+          && event.getConversationIdForMedia().equals(conversationId)) {
+        eventsInConversation.add(event);
+      }
+    }
+
+    return eventsInConversation;
   }
 }

@@ -112,18 +112,15 @@
 </div>
 <%List<Conversation> userConvos = (List<Conversation>) request.getAttribute("conversations");%>
 
-<!--<%List<Conversation> conversations =
- (List<Conversation>) request.getAttribute("conversations");
-%>-->
-<div id="feed">
+<div id="feed"> 
+
  <h2><%= request.getSession().getAttribute("user")%> 's Conversations:</h2>
 
     <%
     if(userConvos != null && !userConvos.isEmpty()) {
       for(Conversation userConvo : userConvos){
     %>
-      <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
-
+      <p><li><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></li></p>
     <%
       }
     }
@@ -131,13 +128,5 @@
 
 </center>
 
-
-  <!--<div id="feed">
-<center>
-
-</div>
-  </div></center>
-
--->
 </body>
 </html>

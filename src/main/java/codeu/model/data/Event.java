@@ -10,8 +10,8 @@ import java.util.Locale;
 import java.time.ZoneId; 
 
 import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import java.awt.image.BufferedImage;
 
 /** 
  *  This class abstracts any object so it can be a User, Conversation, or Message. 
@@ -19,9 +19,9 @@ import codeu.model.store.basic.UserStore;
  */
 public class Event{
 
-	/* Denotes the type of event this is. Conversation, Message, or User. */
+	/* Denotes the type of event this is. Conversation, Message, User, or Media. */
 	public enum EventType{
-    CONVERSATION, MESSAGE, USER;
+    CONVERSATION, MESSAGE, USER, MEDIA;
   }
   private final EventType eventType;
 
@@ -35,6 +35,7 @@ public class Event{
 	private final Instant messageCreationTime;
   private final UUID authorIdForMessage;
   private final String conversationTitleOfMessage;
+  private final UUID conversationIdForMessage;
   private final String messageContent;
   private final UUID messageId;
 
@@ -42,6 +43,15 @@ public class Event{
   private final Instant userCreationTime;
   private final String nameOfUser;
   private final UUID userId;
+
+  /* All the fields needed from the media class. */
+  private final UUID mediaId;
+  private final UUID mediaOwnerId;
+  private final Instant mediaCreationTime;
+  private final String titleOfMedia;
+  private final BufferedImage contentOfMedia;
+  private final String contentTypeOfMedia;
+  private final UUID conversationIdForMedia;
 
   /* Needed to get the user given the ID from a conversation object. */
   private final UserStore userStore;
@@ -63,15 +73,25 @@ public class Event{
     authorIdForConversation = conversation.getOwnerId();
     conversationCreationTime = conversation.getCreationTime();
     conversationId = conversation.getId();
+
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
     messageContent = null;
     messageId = null;
 
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    mediaOwnerId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
 
 	}
 
@@ -114,10 +134,12 @@ public class Event{
     }
     if(error) {
       conversationTitleOfMessage = null;
+      conversationIdForMessage = null;
     }
     else {
       conversationTitleOfMessage = conversationStore.getConversationWithId(
         message.getConversationId()).getTitle();
+      conversationIdForMessage = message.getConversationId();
     }
 
     messageContent = message.getContent();
@@ -126,6 +148,14 @@ public class Event{
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    mediaOwnerId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
 	}
 
   /**
@@ -149,12 +179,21 @@ public class Event{
     messageCreationTime = message.getCreationTime();
     authorIdForMessage = message.getAuthorId();
     conversationTitleOfMessage = testTitle;
+    conversationIdForMessage = null;
     messageContent = message.getContent();
     messageId = message.getId();
 
     userCreationTime = null;
     nameOfUser = null;
     userId = null;
+
+    mediaId = null;
+    mediaOwnerId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
   }
 
   /**
@@ -176,16 +215,83 @@ public class Event{
     messageCreationTime = null;
     authorIdForMessage = null;
     conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
     messageContent = null;
     messageId = null;
     userCreationTime = user.getCreationTime();
     nameOfUser = user.getName();
     userId = user.getId();
-	}
+
+    mediaId = null;
+    mediaOwnerId = null;
+    mediaCreationTime = null;
+    titleOfMedia = null;
+    contentOfMedia = null;
+    contentTypeOfMedia = null;
+    conversationIdForMedia = null;
+  }
+
+  /**
+   * Constructs an new event using a Media object.
+   *
+   * @param media an object of type media
+   */
+  public Event(Media media) {
+    eventType = EventType.MEDIA;
+
+    userStore = UserStore.getInstance();
+    conversationStore = ConversationStore.getInstance();
+
+    titleOfConversation = null;
+    authorIdForConversation = null;
+    conversationCreationTime = null;
+    conversationId = null;
+
+    messageCreationTime = null;
+    authorIdForMessage = null;
+    conversationTitleOfMessage = null;
+    conversationIdForMessage = null;
+    messageContent = null;
+    messageId = null;
+    userCreationTime = null;
+    nameOfUser = null;
+    userId = null;
+
+    mediaId = media.getId();
+    mediaOwnerId = media.getOwnerId();
+    mediaCreationTime = media.getCreationTime();
+    titleOfMedia = media.getTitle();
+    contentOfMedia = media.getContent();
+    contentTypeOfMedia = media.getContentType();
+    conversationIdForMedia = media.getConversationId();
+  }
+
+  public UUID getMediaId() {
+    return mediaId;
+  }
+
+  public UUID getConversationIdForMedia() {
+    return conversationIdForMedia;
+  }
+
+  public UUID getConversationIdForMessage() {
+    return conversationIdForMessage;
+  }
+
+  public String getMessageContent() {
+    return messageContent;
+  }
+
+  public UUID getAuthorIdForMessage() {
+    return authorIdForMessage;
+  }
+
+  public String getNameOfUser() {
+    return nameOfUser;
+  }
 
 	/** Outputs a string based on the type given in the constructor. */
 	public String toString() {
-
 	  if(eventType == EventType.CONVERSATION) {
         return toString(conversationCreationTime) + " PST: "+ 
           userStore.getUser(authorIdForConversation).getName() + 
@@ -198,8 +304,11 @@ public class Event{
           ": " + "\"" + messageContent + "\"";
 	  }
 	  if(eventType == EventType.USER) {
-	  	return toString(userCreationTime) + " PST: " + nameOfUser + " joined!";
+	  	return toString(userCreationTime) + " PST: ";
 	  }
+    if(eventType == EventType.MEDIA) {
+      return "Fix this later. A user uploaded media though";
+    }
 	  else{
 	  	System.err.println("This object has no event type. This is impossible. I don't know how you even caused this error");
 	  	return null;
@@ -240,6 +349,9 @@ public class Event{
 		if(eventType == EventType.CONVERSATION) {
 			return conversationCreationTime.getEpochSecond();
 		}
+    if(eventType == EventType.MEDIA) {
+      return mediaCreationTime.getEpochSecond();
+    }
 		else {
 			System.err.println("This object has no event type");
 			return 0;
@@ -255,6 +367,9 @@ public class Event{
     }
     if(eventType == EventType.CONVERSATION) {
       return conversationId;
+    }
+    if(eventType == EventType.MEDIA) {
+      return mediaId;
     }
     else {
       System.err.println("This object has no event type");

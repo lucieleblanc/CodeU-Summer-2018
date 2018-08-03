@@ -86,5 +86,15 @@
       <url-pattern>/profile/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ProfileViewServlet</servlet-name>
+    <servlet-class>codeu.controller.ProfileViewServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+      <servlet-name>ProfileViewServlet</servlet-name>
+      <url-pattern>/profileView/*</url-pattern>
+  </servlet-mapping>
+
 
 </web-app>
