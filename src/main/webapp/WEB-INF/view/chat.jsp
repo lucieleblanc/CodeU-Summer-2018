@@ -86,7 +86,8 @@
       %>
             <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
        <% } else if(event.getEventType().toString() == "MEDIA") { %>
-                <li><img src="FileUploadServlet?mediaId=<%=event.getMediaId()%>" alt="Upload a profile image" width="450" height="300"></li>
+                <li><img src="FileUploadServlet?mediaId=<%=event.getMediaId()%>" 
+                  alt="Upload a profile image" width="450" height="300"></li>
        <% } %>
       <% } %>
     </ul>

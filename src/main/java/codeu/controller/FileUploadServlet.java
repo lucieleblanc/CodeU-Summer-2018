@@ -96,8 +96,7 @@ public class FileUploadServlet extends HttpServlet {
       String uri = request.getRequestURI();
 
 	  String mediaTitle = null;
-	  Boolean notFromChatJSP = !uri.equals("/chat/FileUploadServlet");
-	  if(notFromChatJSP) {
+	  if(!uri.equals("/chat/FileUploadServlet")) {
         /* Title given by user in profile.jsp. */
 		mediaTitle = (String)request.getParameter("Title"); 
 	  }

@@ -266,6 +266,22 @@ public class Event{
     conversationIdForMedia = media.getConversationId();
   }
 
+  public UUID getUserId() {
+    if(eventType == EventType.CONVERSATION) {
+      return authorIdForConversation;
+    }
+    if(eventType == EventType.MESSAGE) {
+      return authorIdForMessage;
+    }
+    if(eventType == EventType.USER) {
+      return userId;
+    }
+    if(eventType == EventType.MEDIA) {
+      return mediaOwnerId;
+    }
+    return null;
+  }
+
   public UUID getMediaId() {
     return mediaId;
   }

@@ -183,8 +183,10 @@ public class PersistentDataStore {
         InputStream in = new ByteArrayInputStream(contentBytes);
         BufferedImage content = ImageIO.read(in);
         String contentType = (String) entity.getProperty("contentType");
-        UUID conversationId = UUID.fromString((String) entity.getProperty("conversationId"));
-        Media singleMedia = new Media(uuid, ownerUuid, title, creationTime, content, contentType, conversationId);
+        UUID conversationId = UUID.fromString((String) 
+          entity.getProperty("conversationId"));
+        Media singleMedia = new Media(uuid, ownerUuid, title, 
+          creationTime, content, contentType, conversationId);
         singleMedia.setIsProfilePicture(Boolean.valueOf((String) entity.getProperty("isProfilePicture")));
         media.add(singleMedia);
       } catch (Exception e) {
@@ -241,7 +243,9 @@ public class PersistentDataStore {
     mediaEntity.setProperty("creation_time", singleMedia.getCreationTime().toString());
     
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ImageIO.write(singleMedia.getContent(), "jpg", baos);
+    String mediaExtension = singleMedia.getContentType().substring(
+          singleMedia.getContentType().indexOf('/')+1);
+    ImageIO.write(singleMedia.getContent(), mediaExtension, baos);
     byte[] contentBytes = baos.toByteArray();
     String contentString = bytesToHex(contentBytes);
     Text contentText = new Text(contentString);
@@ -254,7 +258,7 @@ public class PersistentDataStore {
     }
     else 
     {
-      mediaEntity.setProperty("conversationId",  null);
+      mediaEntity.setProperty("conversationId", UUID.randomUUID().toString());
     }
     
     datastore.put(mediaEntity);
