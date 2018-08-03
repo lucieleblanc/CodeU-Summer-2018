@@ -323,7 +323,10 @@ public class Event{
 	  	return toString(userCreationTime) + " PST: ";
 	  }
     if(eventType == EventType.MEDIA) {
-      return "Fix this later. A user uploaded media though";
+      return toString(mediaCreationTime) + " PST: "+ 
+          userStore.getUser(mediaOwnerId).getName() + 
+          " upload an image in conversation " + ConversationStore.
+          getInstance().getConversationWithId(conversationIdForMedia).getTitle();
     }
 	  else{
 	  	System.err.println("This object has no event type. This is impossible. I don't know how you even caused this error");
