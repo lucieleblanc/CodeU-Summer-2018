@@ -76,7 +76,7 @@ public class FileUploadServlet extends HttpServlet {
       	picture = mediaStore.getProfilePicture(mediaOwner);
       }
       else if(uri.equals("/chat/FileUploadServlet")) {
-      	UUID mediaId = (UUID)request.getSession().getAttribute("mediaId");
+      	UUID mediaId = UUID.fromString((String)request.getParameter("mediaId"));
         picture = mediaStore.getProfilePicture(mediaId);
       }
 

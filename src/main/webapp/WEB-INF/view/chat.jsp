@@ -81,12 +81,8 @@
               .getUser(event.getAuthorIdForMessage()).getName();
       %>
             <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
-       <% } else if(event.getEventType().toString() == "MEDIA") {
-              session.setAttribute("mediaId", event.getMediaId());
-       %>
-              <div style="float: left;">
-                <li><img src="FileUploadServlet" alt="Upload a profile image" width="450" height="300"></li>
-              </div>
+       <% } else if(event.getEventType().toString() == "MEDIA") { %>
+                <li><img src="FileUploadServlet?mediaId=<%=event.getMediaId()%>" alt="Upload a profile image" width="450" height="300"></li>
        <% } %>
       <% } %>
     </ul>
@@ -128,9 +124,3 @@
 
 </body>
 </html>
-  
-\______
-//------
-|| -  - |
-| ----  |
- -----
