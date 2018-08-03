@@ -144,4 +144,12 @@ public List<Conversation> getConversationWithOwner(UUID userId){
         conversation.getTitle(), conversation);
     }
   }
+
+  /**
+   * Returns the current number of conversations.
+   */
+  public int getNumConversations() {
+    return this.conversations.size();
+  }
 }
+

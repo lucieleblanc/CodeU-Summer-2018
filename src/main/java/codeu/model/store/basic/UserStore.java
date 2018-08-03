@@ -154,4 +154,31 @@ public class UserStore {
     }
   }
 
+  /**
+   * @return the current number of users.
+   */
+  public int getNumUsers() {
+    return this.users.size();
+  }
+
+
+  public List<String> getTopUsernames() {
+    User oldest = users.get(0);
+    User newest = users.get(0);
+    for (User user : users) {
+      if (user.getCreationTime().compareTo(oldest.getCreationTime()) < 0) {
+        oldest = user;
+      } else if (user.getCreationTime().compareTo(newest.getCreationTime()) > 0) {
+        newest = user;
+      }
+    }
+    List<String> topUsers = new ArrayList<>();
+    topUsers.add(oldest.getName());
+    topUsers.add(newest.getName());
+    return topUsers;
+  }
+
+}
+
+
 }
