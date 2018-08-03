@@ -16,11 +16,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Event" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
-<%
-Conversation conversation = (Conversation) request.getAttribute("conversation");
-List<Message> messages = (List<Message>) request.getAttribute("messages");
-%>
+
+<% Conversation conversation = (Conversation) request.getAttribute("conversation"); %>
 
 <!DOCTYPE html>
 <html>
@@ -65,6 +64,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
   </nav>
 
+  <% List<Event> events = (List<Event>) request.getAttribute("events"); %>
   <div id="container">
 
     <h1><%= conversation.getTitle() %>
@@ -73,26 +73,46 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <hr/>
 
     <div id="chat">
-      <ul>
-    <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
-    <%
-      }
-    %>
-      </ul>
+    <ul>
+      <%
+        for (Event event : events) {
+          if(event.getEventType().toString() == "MESSAGE") {
+            String author = UserStore.getInstance()
+              .getUser(event.getAuthorIdForMessage()).getName();
+      %>
+            <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
+       <% } else if(event.getEventType().toString() == "MEDIA") { %>
+                <li><img src="FileUploadServlet?mediaId=<%=event.getMediaId()%>" alt="Upload a profile image" width="450" height="300"></li>
+       <% } %>
+      <% } %>
+    </ul>
     </div>
 
     <hr/>
 
-    <% if (request.getSession().getAttribute("user") != null) { %>
+  <%
+    String chatName = (String) request.getAttribute("chatName");
+    session.setAttribute("chatName", chatName);
+  %>
+
+  <% if (request.getSession().getAttribute("user") != null) { %>
     <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="text" name="message">
+      <input type="text" name="message">
         <br/>
-        <button type="submit">Send</button>
+         <button type="submit">Send</button>
+    </form>
+    <form id = "form" method="POST" action="FileUploadServlet" enctype="multipart/form-data">
+      <table border="0">
+        <tr>
+          <td>Upload Image: </td>
+          <td><input type="file" name="photo" size="50"/></td>  
+        </tr>
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="Send">
+        </td>
+      </tr>
+      </table>
     </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>

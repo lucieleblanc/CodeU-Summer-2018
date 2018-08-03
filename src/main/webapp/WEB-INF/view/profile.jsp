@@ -116,7 +116,7 @@
     if(userConvos != null && !userConvos.isEmpty()) {
       for(Conversation userConvo : userConvos){
     %>
-      <li><p><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></p></li>
+      <p><li><a href="/chat/<%= userConvo.getTitle() %>"> <%= userConvo.getTitle() %></a></li></p>
        
     <%
       }

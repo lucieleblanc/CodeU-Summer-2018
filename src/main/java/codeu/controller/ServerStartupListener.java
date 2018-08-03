@@ -37,8 +37,8 @@ public class ServerStartupListener implements ServletContextListener {
       List<Media> media = PersistentStorageAgent.getInstance().loadMedia();
       MediaStore.getInstance().setMedia(media);
 
-      /* This lets the EventStore access the user, conversation, and message lists. */
-      EventStore.getInstance().setEvents(users, conversations, messages);
+      /* This lets the EventStore access the user, conversation, message, and media lists. */
+      EventStore.getInstance().setEvents(users, conversations, messages, media);
 
     } catch (PersistentDataStoreException e) {
       System.err.println("Server didn't start correctly. An error occurred during Datastore load!");
