@@ -64,7 +64,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
             <a href="/profileView/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
             joined
         </li>
-      <% } else { %>
+      <% } else if(event.toString() != null) { %>
         <li><%= event.toString() %>
         <% if(event.getEventType().toString() == "CONVERSATION") { %>
         <a href="/chat/<%=event.getTitleOfConversation()%>">
