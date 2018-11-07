@@ -41,43 +41,45 @@ public class Media {
   }
 
   /** Returns the ID of this Media. */
-  public UUID getId() {
+  public UUID getId() { //Constant
     return id;
   }
 
   /** Returns the ID of the User who created this Media. */
-  public UUID getOwnerId() {
+  public UUID getOwnerId() { //Conversation and Media (technically message)
     return owner;
   }
 
   /** Returns the title of this Media. */
-  public String getTitle() {
+  public String getTitle() { //Conversation and Media
     return title;
   }
 
   /** Returns the creation time of this Media. */
-  public Instant getCreationTime() {
+  public Instant getCreationTime() {//Constant
     return creation;
   }
 
   /** Returns the content of this Media. */
-  public BufferedImage getContent() {
+  public BufferedImage getContent() { //only this
     return content;
   }
 
-  public String getContentType() {
+  public String getContentType() { //only this
     return contentType;
   }
 
-  public void setIsProfilePicture(Boolean bool) {
+  public void setIsProfilePicture(Boolean bool) { //only this
     isProfilePicture = bool;
   }
 
-  public Boolean getIsProfilePicture() {
+  public Boolean getIsProfilePicture() { //only this
     return isProfilePicture;
   }
 
-  public UUID getConversationId() {
+  public UUID getConversationId() { //message and media(media should probably be split into types where it was uploaded from)
     return conversationId;
   }
+
+  //add to string constant
 }

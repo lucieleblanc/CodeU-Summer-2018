@@ -44,39 +44,33 @@ public class User {
   }
 
   /** Returns the ID of this User. */
-  public UUID getId() {
+  public UUID getId() { //Constant
     return id;
   }
 
   /** Returns the username of this User. */
-  public String getName() {
+  public String getName() { //only this
     return name;
   }
 
   /** Returns the password hash of this User. */
-  public String getPasswordHash() {
+  public String getPasswordHash() { //only this
     return passwordHash;
   }
 
   /** Returns the creation time of this User. */
-  public Instant getCreationTime() {
+  public Instant getCreationTime() {//Constant
     return creation;
   }
 
-  public void setBio(String bio){
+  public void setBio(String bio){ //only this
     this.bio = bio;
   }
 
-  public String getBio(){
+  public String getBio(){ //only this
     return bio;
   }
 
-/**@Override
-public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
-        String userBio = request.getParameter("bio");
-        System.out.println(userBio);
-        response.sendRedirect("/profile.jsp");
-    }**/
-  //now we have a new property (?) of the user class (bio)
+  //add to string constant
+
 }

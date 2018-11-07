@@ -44,27 +44,29 @@ public class Message {
   }
 
   /** Returns the ID of this Message. */
-  public UUID getId() {
+  public UUID getId() { //Constant
     return id;
   }
 
   /** Returns the ID of the Conversation this Message belongs to. */
-  public UUID getConversationId() {
+  public UUID getConversationId() { //message and media
     return conversation;
   }
 
   /** Returns the ID of the User who sent this Message. */
-  public UUID getAuthorId() {
+  public UUID getAuthorId() { //Conversation and Media (technically message)
     return author;
   }
 
   /** Returns the text content of this Message. */
-  public String getContent() {
+  public String getContent() { //only this
     return content;
   }
 
   /** Returns the creation time of this Message. */
-  public Instant getCreationTime() {
+  public Instant getCreationTime() {//Constant
     return creation;
   }
+
+  //add to string constant
 }
