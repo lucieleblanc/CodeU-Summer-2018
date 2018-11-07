@@ -147,4 +147,17 @@ public class MediaStore {
     profilePictureMap.put(user, singleMedia);
     singleMedia.setIsProfilePicture(true);
   }
+
+  public List<Media> getMediaInConversation(UUID mediaId) {
+
+    List<Media> mediaInConversation = new ArrayList<>();
+
+    for (Media singleMedia : media) {
+      if (singleMedia.getConversationId().equals(mediaId)) {
+        mediaInConversation.add(singleMedia);
+      }
+    }
+
+    return mediaInConversation;
+  }
 }
