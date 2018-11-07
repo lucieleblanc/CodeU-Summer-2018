@@ -16,4 +16,6 @@ public interface Event{
   public Instant getCreationTime();
 
   public String toString();
+
+  public Long getCreationTimeLong();
 }

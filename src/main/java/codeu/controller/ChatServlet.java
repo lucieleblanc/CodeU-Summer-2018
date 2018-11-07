@@ -15,15 +15,17 @@
 package codeu.controller;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.Event;
+import codeu.model.data.Media;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.data.Media;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.MediaStore;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -45,6 +47,9 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Users. */
+  private MediaStore mediaStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -52,6 +57,7 @@ public class ChatServlet extends HttpServlet {
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setMediaStore(MediaStore.getInstance());
   }
 
   /**
@@ -79,6 +85,14 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
+   * Sets the MediaStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setMediaStore(MediaStore mediaStore) {
+    this.mediaStore = mediaStore;
+  }
+
+  /**
    * This function fires when a user navigates to the chat page. It gets the conversation title from
    * the URL, finds the corresponding Conversation, and fetches the messages in that Conversation.
    * It then forwards to chat.jsp for rendering.
@@ -100,8 +114,17 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     //get list of media and messages in conversation, put them together, sort list, fix jsp
-    List<Event> events = 
+    List<Event> events = new ArrayList<>();
+    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<Media> media = mediaStore.getMediaInConversation(conversationId);
+    for(Event m : messages) {
+      events.add(m);
+    }
+    for(Event m : media) {
+      events.add(m);
+    }
 
+    request.setAttribute("events", events);
     request.setAttribute("conversation", conversation);
     request.setAttribute("chatName", conversationTitle);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);

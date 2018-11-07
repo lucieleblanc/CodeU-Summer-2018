@@ -68,6 +68,10 @@ public class Message implements Event{
     return creation;
   }
 
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
   public String toString() {
     return "Message to string in progress";
   }

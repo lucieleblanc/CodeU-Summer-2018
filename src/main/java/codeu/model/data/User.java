@@ -75,4 +75,8 @@ public class User implements Event{
     return "User to string in progress";
   }
 
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
 }

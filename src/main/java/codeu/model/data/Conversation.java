@@ -64,6 +64,10 @@ public class Conversation implements Event{
     return creation;
   }
 
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
   public String toString() {
     return "Conversation to string in progress";
   }

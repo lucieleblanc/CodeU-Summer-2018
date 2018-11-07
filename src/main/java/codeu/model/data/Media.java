@@ -84,4 +84,8 @@ public class Media implements Event{
   public String toString() {
     return "Media to string in progress";
   }
+
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
 }
