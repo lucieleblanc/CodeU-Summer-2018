@@ -8,7 +8,7 @@ import java.util.UUID;
  * Class representing media (a picture, video, or sound byte).
  * The media is uploaded by Users.
  */
-public class Media {
+public class Media implements Event{
   private final UUID id;
   private final UUID owner;
   private final Instant creation;
