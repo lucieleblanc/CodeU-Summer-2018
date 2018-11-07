@@ -26,6 +26,7 @@ import codeu.model.store.basic.MediaStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -123,6 +124,7 @@ public class ChatServlet extends HttpServlet {
     for(Event m : media) {
       events.add(m);
     }
+    events.sort(Comparator.comparingLong(event -> event.getCreationTimeLong()));
 
     request.setAttribute("events", events);
     request.setAttribute("conversation", conversation);

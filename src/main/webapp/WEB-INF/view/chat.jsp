@@ -16,6 +16,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Media" %>
 <%@ page import="codeu.model.data.Event" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 
@@ -80,13 +81,16 @@
     <ul>
       <%
         for (Event event : events) {
-          if(event.getEventType().toString() == "MESSAGE") {
+          if(event instanceof Message) {
+            Message m = (Message) event;
             String author = UserStore.getInstance()
-              .getUser(event.getAuthorIdForMessage()).getName();
+              .getUser(m.getAuthorId()).getName();
       %>
-            <li><strong><%= author %>:</strong> <%= event.getMessageContent() %></li>
-       <% } else if(event.getEventType().toString() == "MEDIA") { %>
-                <li><img src="FileUploadServlet?mediaId=<%=event.getMediaId()%>" 
+            <li><strong><%= author %>:</strong> <%= m.getContent() %></li>
+       <% } else if(event instanceof Media) { 
+                Media m = (Media) event;
+        %>
+                <li><img src="FileUploadServlet?mediaId=<%=m.getId()%>" 
                   alt="Upload a profile image" width="450" height="300"></li>
        <% } %>
       <% } %>
