@@ -82,10 +82,16 @@ public class Media implements Event{
   }
 
   public String toString() {
-    return "Media to string in progress";
+    if(ConversationStore.getInstance().getConversationWithId(conversationId) != null) {
+      return toString(creation) + " PST: "+ 
+          userStore.getUser(owner).getName() + 
+          " uploaded an image in conversation: " + ConversationStore.
+          getInstance().getConversationWithId(conversationId).getTitle();
+    }
   }
 
   public Long getCreationTimeLong() {
     return creation.getEpochSecond();
   }
 }
+

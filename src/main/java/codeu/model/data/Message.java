@@ -76,3 +76,11 @@ public class Message implements Event{
     return "Message to string in progress";
   }
 }
+
+
+    //     if(eventType == EventType.MESSAGE) {
+    //     return toString(messageCreationTime) + " PST: " + 
+    //       userStore.getUser(authorIdForMessage).getName() + 
+    //       " sent a message in " + conversationTitleOfMessage + 
+    //       ": " + "\"" + messageContent + "\"";
+    // }
