@@ -41,7 +41,7 @@ public class Media {
   }
 
   /** Returns the ID of this Media. */
-  public UUID getId() { //Constant
+  public UUID getId() { 
     return id;
   }
 
@@ -56,7 +56,7 @@ public class Media {
   }
 
   /** Returns the creation time of this Media. */
-  public Instant getCreationTime() {//Constant
+  public Instant getCreationTime() {
     return creation;
   }
 
@@ -81,5 +81,7 @@ public class Media {
     return conversationId;
   }
 
-  //add to string constant
+  public String toString() {
+    return "Media to string in progress";
+  }
 }

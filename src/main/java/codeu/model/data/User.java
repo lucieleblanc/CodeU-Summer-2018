@@ -18,7 +18,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /** Class representing a registered user. */
-public class User {
+public class User implements Event{
   private final UUID id;
   private final String name;
   private final String passwordHash;
@@ -44,7 +44,7 @@ public class User {
   }
 
   /** Returns the ID of this User. */
-  public UUID getId() { //Constant
+  public UUID getId() { 
     return id;
   }
 
@@ -59,7 +59,7 @@ public class User {
   }
 
   /** Returns the creation time of this User. */
-  public Instant getCreationTime() {//Constant
+  public Instant getCreationTime() {
     return creation;
   }
 
@@ -71,6 +71,8 @@ public class User {
     return bio;
   }
 
-  //add to string constant
+  public String toString() {
+    return "User to string in progress";
+  }
 
 }
