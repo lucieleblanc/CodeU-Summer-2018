@@ -18,7 +18,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /** Class representing a message. Messages are sent by a User in a Conversation. */
-public class Message {
+public class Message implements Event{
 
   private final UUID id;
   private final UUID conversation;
@@ -44,22 +44,22 @@ public class Message {
   }
 
   /** Returns the ID of this Message. */
-  public UUID getId() {
+  public UUID getId() { 
     return id;
   }
 
   /** Returns the ID of the Conversation this Message belongs to. */
-  public UUID getConversationId() {
+  public UUID getConversationId() { //message and media
     return conversation;
   }
 
   /** Returns the ID of the User who sent this Message. */
-  public UUID getAuthorId() {
+  public UUID getAuthorId() { //Conversation and Media (technically message)
     return author;
   }
 
   /** Returns the text content of this Message. */
-  public String getContent() {
+  public String getContent() { //only this
     return content;
   }
 
@@ -67,4 +67,20 @@ public class Message {
   public Instant getCreationTime() {
     return creation;
   }
+
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
+  public String toString() {
+    return "Message to string in progress";
+  }
 }
+
+
+    //     if(eventType == EventType.MESSAGE) {
+    //     return toString(messageCreationTime) + " PST: " + 
+    //       userStore.getUser(authorIdForMessage).getName() + 
+    //       " sent a message in " + conversationTitleOfMessage + 
+    //       ": " + "\"" + messageContent + "\"";
+    // }

@@ -23,7 +23,7 @@ import java.util.List;
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
  * created by a User and contain Messages.
  */
-public class Conversation {
+public class Conversation implements Event{
   public final UUID id;
   public final UUID owner;
   public final Instant creation;
@@ -44,34 +44,31 @@ public class Conversation {
     this.title = title;
   }
 
-  /*public boolean equals(List, List) {
-    List x = new ArrayList(); 
-    List y = new ArrayList();
-    if(x == y){
-      return true;
-    }
-    else{
-      return false; 
-    }
-  }*/
-
   /** Returns the ID of this Conversation. */
-  public UUID getId() {
+  public UUID getId() { 
     return id;
   }
 
   /** Returns the ID of the User who created this Conversation. */
-  public UUID getOwnerId() {
+  public UUID getOwnerId() { //Conversation and Media (technically message)
     return owner;
   }
 
   /** Returns the title of this Conversation. */
-  public String getTitle() {
+  public String getTitle() { //Conversation and Media
     return title;
   }
 
   /** Returns the creation time of this Conversation. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
+  public String toString() {
+    return "Conversation to string in progress";
   }
 }

@@ -1,5 +1,9 @@
 
 <%@ page import="java.util.List" %>
+<%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Media" %>
+<%@ page import="codeu.model.data.User" %>
+<%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Event" %>
 
 <%
@@ -58,21 +62,32 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 
 <div id="feed">
   <ul>
-    <% for(Event event: events){ %>
-      <% if(event.getEventType().toString() == "USER") { %>
-        <li><%=event.toString()%> 
-            <a href="/profileView/<%=event.getNameOfUser()%>"><%=event.getNameOfUser()%></a>
-            joined
-        </li>
-      <% } else if(event.toString() != null) { %>
-        <li><%= event.toString() %>
-        <% if(event.getEventType().toString() == "CONVERSATION") { %>
-        <a href="/chat/<%=event.getTitleOfConversation()%>">
-            <%= event.getTitleOfConversation()%></li>
-        </a>
-        <% } %> 
+    <%
+        for (Event event : events) {
+          if(event instanceof Message) {
+              Message m = (Message) event;
+      %>
+              <li><%=m.toString()%></li>
+       <% } else if(event instanceof Media) { 
+              Media m = (Media) event;
+        %>
+              <li><%=m.toString()%></li>
+        <% } else if(event instanceof User) { 
+              User u = (User) event;
+        %>
+              <li><%=u.toString()%> 
+              <a href="/profileView/<%=u.getName()%>"><%=u.getName()%></a>
+              joined
+              </li>
+        <% } else if(event instanceof Conversation) { 
+              Conversation c = (Conversation) event;
+        %>
+              <li><%=c.toString()%></li>
+              <a href="/chat/<%=c.getTitle()%>">
+              <%= c.getTitle()%></li>
+              </a>
+       <% } %>
       <% } %>
-    <% } %>
   </ul>
 </div>
 

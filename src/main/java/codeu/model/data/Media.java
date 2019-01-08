@@ -8,7 +8,7 @@ import java.util.UUID;
  * Class representing media (a picture, video, or sound byte).
  * The media is uploaded by Users.
  */
-public class Media {
+public class Media implements Event{
   private final UUID id;
   private final UUID owner;
   private final Instant creation;
@@ -41,17 +41,17 @@ public class Media {
   }
 
   /** Returns the ID of this Media. */
-  public UUID getId() {
+  public UUID getId() { 
     return id;
   }
 
   /** Returns the ID of the User who created this Media. */
-  public UUID getOwnerId() {
+  public UUID getOwnerId() { //Conversation and Media (technically message)
     return owner;
   }
 
   /** Returns the title of this Media. */
-  public String getTitle() {
+  public String getTitle() { //Conversation and Media
     return title;
   }
 
@@ -61,23 +61,37 @@ public class Media {
   }
 
   /** Returns the content of this Media. */
-  public BufferedImage getContent() {
+  public BufferedImage getContent() { //only this
     return content;
   }
 
-  public String getContentType() {
+  public String getContentType() { //only this
     return contentType;
   }
 
-  public void setIsProfilePicture(Boolean bool) {
+  public void setIsProfilePicture(Boolean bool) { //only this
     isProfilePicture = bool;
   }
 
-  public Boolean getIsProfilePicture() {
+  public Boolean getIsProfilePicture() { //only this
     return isProfilePicture;
   }
 
-  public UUID getConversationId() {
+  public UUID getConversationId() { //message and media(media should probably be split into types where it was uploaded from)
     return conversationId;
   }
+
+  public String toString() {
+    if(ConversationStore.getInstance().getConversationWithId(conversationId) != null) {
+      return toString(creation) + " PST: "+ 
+          userStore.getUser(owner).getName() + 
+          " uploaded an image in conversation: " + ConversationStore.
+          getInstance().getConversationWithId(conversationId).getTitle();
+    }
+  }
+
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
 }
+

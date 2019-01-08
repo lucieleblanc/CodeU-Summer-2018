@@ -2,13 +2,11 @@
 package codeu.controller;
 
 import codeu.model.data.Conversation;
-import codeu.model.data.Event;
 import codeu.model.data.Media;
 import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MediaStore;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.EventStore;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,8 +39,6 @@ public class FileUploadServlet extends HttpServlet {
     private MediaStore mediaStore;
     /* Store class that gives access to Users. */
     private UserStore userStore;
-    /* Store class that gives access to Events. */
-    private EventStore eventStore;
     /* Store class that gives access to Conversations. */
     private ConversationStore conversationStore;
 
@@ -56,7 +52,6 @@ public class FileUploadServlet extends HttpServlet {
       super.init();
       setMediaStore(MediaStore.getInstance());
       setUserStore(UserStore.getInstance());
-      setEventStore(EventStore.getInstance());
       setConversationStore(ConversationStore.getInstance());
     }
 
@@ -142,9 +137,6 @@ public class FileUploadServlet extends HttpServlet {
 	    if(uri.equals("/profile/FileUploadServlet")) {
 	      mediaStore.setProfilePicture(user.getName(), media);
 	    }
-	    if(uri.equals("/chat/FileUploadServlet")) {
-	      eventStore.addEvent(new Event(media));
-	    }
 	      mediaStore.addMedia(media);
 	  }
         
@@ -172,14 +164,6 @@ public class FileUploadServlet extends HttpServlet {
 	*/
 	void setUserStore(UserStore userStore) {
 	  this.userStore = userStore;
-	}
-
-   /**
-	* Sets the EventStore used by this servlet. This function provides a common setup method for
-	* use by the test framework or the servlet's init() function.
-	*/
-	void setEventStore(EventStore eventStore) {
-	  this.eventStore = eventStore;
 	}
 
 	/**

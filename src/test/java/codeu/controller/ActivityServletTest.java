@@ -9,8 +9,6 @@ import java.util.UUID;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.data.Event;
-import codeu.model.store.basic.EventStore;
 import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
@@ -32,7 +30,6 @@ public class ActivityServletTest{
   private HttpSession mockSession;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
-  private EventStore mockEventStore;
 
   @Before
   public void setup() {
@@ -48,10 +45,6 @@ public class ActivityServletTest{
     	.getRequestDispatcher("/WEB-INF/view/activity.jsp"))
         .thenReturn(mockRequestDispatcher);
 
-    /* Mock the EventStore. */
-    mockEventStore = Mockito.mock(EventStore.class);
-    /* Allows us to use EventStore for all tests. */
-    activityServlet.setEventStore(mockEventStore);
   }
 
   /**
@@ -73,19 +66,6 @@ public class ActivityServletTest{
       UUID.randomUUID(), "test_user", 
       "test_user_PHash", Instant.now(), 
       "test_user_bio");
-    
-    List<Event> fakeEventList = new ArrayList<>(Arrays.asList(
-      new Event(fakeConversation),  //Conversation Event
-      new Event(fakeMessage, "test_title"),       //Message Event
-      new Event(fakeUser)           //User Event
-      ));
-
-    /* 
-     * When get allEventsSorted() is called, 
-     * return the above list of fake events. 
-     */
-    Mockito.when(mockEventStore
-      .getAllEventsSorted()).thenReturn(fakeEventList);
 
     /* 
      * Use the doGet function in the activity servlet with the 
@@ -99,12 +79,6 @@ public class ActivityServletTest{
      * "make sure that this function actually did this"
      */
 
-    /* 
-     * Verify that we set the attribute 
-     * events which is the fakeEventList. 
-     */
-    Mockito.verify(mockRequest)
-      .setAttribute("events", fakeEventList);
 
     /*
      * Verify that we our we forwarded the request to 

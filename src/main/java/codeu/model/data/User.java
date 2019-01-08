@@ -18,7 +18,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /** Class representing a registered user. */
-public class User {
+public class User implements Event{
   private final UUID id;
   private final String name;
   private final String passwordHash;
@@ -44,17 +44,17 @@ public class User {
   }
 
   /** Returns the ID of this User. */
-  public UUID getId() {
+  public UUID getId() { 
     return id;
   }
 
   /** Returns the username of this User. */
-  public String getName() {
+  public String getName() { //only this
     return name;
   }
 
   /** Returns the password hash of this User. */
-  public String getPasswordHash() {
+  public String getPasswordHash() { //only this
     return passwordHash;
   }
 
@@ -63,20 +63,20 @@ public class User {
     return creation;
   }
 
-  public void setBio(String bio){
+  public void setBio(String bio){ //only this
     this.bio = bio;
   }
 
-  public String getBio(){
+  public String getBio(){ //only this
     return bio;
   }
 
-/**@Override
-public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
-        String userBio = request.getParameter("bio");
-        System.out.println(userBio);
-        response.sendRedirect("/profile.jsp");
-    }**/
-  //now we have a new property (?) of the user class (bio)
+  public String toString() {
+    return "User to string in progress";
+  }
+
+  public Long getCreationTimeLong() {
+    return creation.getEpochSecond();
+  }
+
 }
